@@ -212,8 +212,7 @@ def analyse_module():
     warnings_to_process = False
     print('\nProcessing Module Analysis Data.')
     # Confirm the required files are in place
-    required_files = ['Master Assessments File', 'Master Headings File',
-                      'Modules File', 'Module Names File',
+    required_files = ['Modules File', 'Module Names File',
                       'Months (Short) File',
                       'Student Info File', 'Master Completions File',
                       'Master Completions Headings File']
@@ -280,7 +279,7 @@ def analyse_module():
     # Add column for date module completed
     assess_data_df = add_module_cols(assess_data_df, module_dict, month_order,
                                      False)
-    # Drop studdents not completed module or with transferred
+    # Drop students not completed module or with transferred
     # Convert 'Transferred' to ''
     remove = ['Transferred']
     assess_data_df[module] = assess_data_df[module].apply(ad.convert_to_value,
@@ -757,8 +756,11 @@ def clean_modules(modules):
         modules (list): List of module assessments (list of lists) with empty
         items removed.
     """
-    # print('Passed modules:')
-    # ad.debug_list(modules)
+    # Debugging script - uncomment to check passed modules
+    '''
+    print('Passed modules:')
+    ad.debug_list(modules)
+    '''
     for item in modules:
         n = 0
         while n < len(item):
@@ -1307,18 +1309,23 @@ def get_completion_month(months, month_order, order='last'):
         order (str): Order to return.
             last = return the latest date (newest)
             first = return the earliest date (oldest)
-    
     """
+    # Debugging script - uncomment to check format of dates
+    '''
     print('\nMonths:\n')
     ad.debug_list(months)
     print('\nMonth order:\n')
     ad.debug_list(month_order)
+    '''
     # Create dictionary with month values in order
     month_order_dict = ad.create_ordered_dict(month_order)
-    # print('Months list (completed months):')
-    # ad.debug_list(months)
-    # print('Months_order_dict:')
-    # ad.debug_dict(month_order_dict)
+    # Debugging script - uncomment to check format of dates
+    '''
+    print('Months list (completed months):')
+    ad.debug_list(months)
+    print('Months_order_dict:')
+    ad.debug_dict(month_order_dict)
+    '''
     if months: # make sure there is at least one month passed
         # Set initial latest and earliest months
         latest = month_order_dict[months[0]]
