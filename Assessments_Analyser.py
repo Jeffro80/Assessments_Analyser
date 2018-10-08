@@ -389,30 +389,30 @@ def analysis():
     module_names = ft.load_headings('Module_Names_{}'.format(course_code), 'e')
     print('Loaded {}.'.format('Module_Names_{}'.format(course_code)))
     # Load enrolment_data file
-    print('\nLoading {}...'.format('enrolment_data.csv'))
+    print('\nLoading {}...'.format('Enrolment Data File'))
     enrolment_data = ft.load_csv('enrolment_data', 'e')
-    print('Loaded {}.'.format('enrolment_data.csv'))
+    print('Loaded {}.'.format('Enrolment Data File'))
     # Load Enrolment Data Headings file
-    print('\nLoading {}...'.format('Enrolment_Data_Headings.txt'))
+    print('\nLoading {}...'.format('Enrolment Data Headings File'))
     enrol_data_headings = ft.load_headings('Enrolment_Data_Headings', 'e')
-    print('Loaded {}.'.format('Enrolment_Data_Headings'))
+    print('Loaded {}.'.format('Enrolment Data Headings File'))
     # Load Student Data
-    print('\nLoading {}...'.format('student_data.csv'))
+    print('\nLoading {}...'.format('Student Data File'))
     student_data = ft.load_csv('student_data', 'e')
-    print('Loaded {}.'.format('student_data.csv'))
+    print('Loaded {}.'.format('Student Data File'))
     # Load Student Data Headings file
-    print('\nLoading {}...'.format('Student_Data_Headings.txt'))
+    print('\nLoading {}...'.format('Student Data Headings File'))
     student_data_headings = ft.load_headings('Student_Data_Headings', 'e')
-    print('Loaded {}.'.format('Student_Data_Headings'))
+    print('Loaded {}.'.format('Student Data Headings File'))
     # Load Graduation Dates Data
     print('\nLoading {}...'.format('Graduation Dates Data'))
     grad_dates_data = ft.load_csv('graduation_dates', 'e')
     print('Loaded {}.'.format('Graduation Dates Data'))
     # Load Graduation Dates Data Headings file
-    print('\nLoading {}...'.format('Graduation_Dates_Headings.txt'))
+    print('\nLoading {}...'.format('Graduation Dates Headings File'))
     grad_dates_headings = ft.load_headings('Graduation_Dates_Headings',
                                                  'e')
-    print('Loaded {}.'.format('Graduation_Dates_Headings'))
+    print('Loaded {}.'.format('Graduation Dates Headings File'))
     # Load Pacific Island Nations File
     print('\nLoading {}...'.format('Pacific Island Nations File'))
     island_nations = ft.load_headings('pacific_island_nations.txt')
