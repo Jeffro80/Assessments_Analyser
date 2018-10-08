@@ -213,8 +213,10 @@ def analyse_module():
     print('\nProcessing Module Analysis Data.')
     # Confirm the required files are in place
     required_files = ['Master Assessments File', 'Master Headings File',
-                      'Modules File', 'Module Names File', 'months.txt',
-                      'Student Info File']
+                      'Modules File', 'Module Names File',
+                      'Months (Short) File',
+                      'Student Info File', 'Master Completions File',
+                      'Master Completions Headings File']
     ad.confirm_files('Process Module Analysis Data', required_files)
     # Get course code
     course_code = get_course_code()
@@ -247,9 +249,9 @@ def analyse_module():
     updated_student_headings = [s_id_col, email_col]
     student_info_df = student_info_df[updated_student_headings]
     # Load months order file
-    print('\nLoading {}...'.format('months.txt'))
-    month_order = ft.load_headings('months', 'e')
-    print('Loaded {}.'.format('months.txt'))
+    print('\nLoading {}...'.format('Months (Short) File'))
+    month_order = ft.load_headings('months_short', 'e')
+    print('Loaded {}.'.format('Months (Short) File'))
     # Load module names file
     print('\nLoading {}...'.format('Module_Names_{}'.format(course_code)))
     module_names = ft.load_headings('Module_Names_{}'.format(course_code), 'e')
@@ -335,10 +337,12 @@ def analysis():
     required_files = ['Master Completion File',
                       'Master Completion Headings File', 
                       'Master Results File', 'Master Results Headings File',
-                      'Modules File', 'Assessment Names File', 'months.txt',
-                      'Student Details File', 'enrolment_data.csv',
+                      'Modules File', 'Assessment Names File',
+                      'Student Data File', 'Enrolment Data Headings File',
                       'Pacific Island Nations File', 'Graduation Dates File',
-                      'Graduation Dates Headings File']
+                      'Graduation Dates Headings File', 'Enrolment Data File',
+                      'Months (Short) File', 'Student Data Headings File',
+                      'Module Names File']
     ad.confirm_files('Process Analysis Data', required_files)
     # Display menu
     # Get analysis action
@@ -372,9 +376,9 @@ def analysis():
     print('Loaded {}.'.format('Master_Results_Headings_{}'.format(
             course_code)))
     # Load months order file
-    print('\nLoading {}...'.format('months.txt'))
-    month_order = ft.load_headings('months', 'e')
-    print('Loaded {}.'.format('months.txt'))
+    print('\nLoading {}...'.format('Months (Short) File'))
+    month_order = ft.load_headings('months_short', 'e')
+    print('Loaded {}.'.format('Months (Short) File'))
     # Load assessment names file
     print('\nLoading {}...'.format('Assessment_Names_{}'.format(course_code)))
     assessment_names = ft.load_headings('Assessment_Names_{}'.format(
