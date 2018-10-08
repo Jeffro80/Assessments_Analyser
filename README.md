@@ -29,6 +29,12 @@ dialog.
 
 # Functions
 
+## Analyse Module
+
+Perform analysis on the completion of a specific module within a course. Outputs
+a file with the number of students completing the module each month, and another
+file with the Student ID, Name, Email and month completed for the required module.
+
 ## Create Master Completion File
 
 Creates a Master Completion file for a course. This file tracks the completion
@@ -560,6 +566,25 @@ qryStudentAnalysis in the Student Database (extract headings).
 
 Should remain consistent but may need updating if there are system changes.
 
+## Student Info File
+
+### File Name
+
+student_info.csv
+
+### Contents
+
+Student ID, Name (First + Last) and Email for each student in the Student
+Database.
+
+### Structure
+
+CSV file with StudentPK, Name and Email columns.
+
+### Source
+
+qryStudentFullNames query in the Student Database.
+
 # Dependencies
 
 The following third-party libraries are imported and therefore are required for
@@ -589,17 +614,15 @@ of the analysis() function.
 function.
 - Rename enrolment_data.csv as Enrolment Data File in the required files section
 of the analysis() function.
-- Rename months.txt as Months (Short) File in the required files section of the
-analysis() function.
-- Change months.txt to months_short.txt in analysis() and analyse_module()
-functions.
 - Add Enrolment Data Headings File to required files in analysis().
+- Fix error in analysis() where updated_date conversion to datetime fails.
 
 ## Current development step
 
 - Module Analysis: Fix processing of months
 - Analysis function: Add filtering of sample
 - Analysis function: Add specific courses to process_filter_option()
+- Remove listing of dates from Anayse module (if working)
 
 
 ## Required development steps
