@@ -16,7 +16,7 @@ The app outputs CSV files for Master files and XLS files for reports.
 
 Version Number 0.523  
 App last updated 21 September 2018  
-Readme last updated 4 October 2018
+Readme last updated 9 October 2018
 
 # Operation
 
@@ -51,6 +51,32 @@ on which the assessment was marked competent.
 
 - Master Results Headings File
 
+## Perform Analysis
+
+Performs a range of analysis on the completion of assessments.
+
+### Required Files
+
+- Assessment Names File
+- Enrolment Data File
+- Enrolment Data Headings File
+- Graduation Dates File
+- Graduation Dates Headings File
+- Master Completion File
+- Master Completion Headings File
+- Master Results File
+- Master Results Headings File
+- Module Names File
+- Modules File
+- Months (Short) File
+- Pacific Island Nations File
+- Student Data File
+- Student Data Headings File
+
+### Notes
+
+Function is still under development.
+
 ## Update Master Completion File
 
 Updates a Master Completion File with the assessments that were completed during
@@ -84,32 +110,6 @@ the month being processed and the date on which they were completed.
 - Enrolment IDs File
 - Master Results File
 - Master Results Headings File
-
-## Perform Analysis
-
-Performs a range of analysis on the completion of assessments.
-
-### Required Files
-
-- Assessment Names File
-- Enrolment Data File
-- Enrolment Data Headings File
-- Graduation Dates File
-- Graduation Dates Headings File
-- Master Completion File
-- Master Completion Headings File
-- Master Results File
-- Master Results Headings File
-- Module Names File
-- Modules File
-- Months (Short) File
-- Pacific Island Nations File
-- Student Data File
-- Student Data Headings File
-
-### Notes
-
-Function is still under development.
 
 # Files used
 
