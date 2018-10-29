@@ -2523,6 +2523,9 @@ def update_comp_file():
     # Extract Month and Year from Date and time column
     assessments_df['Date and time'] = assessments_df['Date and time'].apply(
             extract_month_year)
+    # Convert Month and Year to Mmm-YY
+    assessments_df['Date and time'] = assessments_df['Date and time'].apply(
+            da.convert_to_mmm_yy)
     # Temp save to check
     assessments_df.to_csv('assessments_check_{}.csv'.format(
             ft.generate_time_string()), index=False)
