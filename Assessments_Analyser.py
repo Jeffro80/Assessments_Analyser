@@ -997,7 +997,7 @@ def filtering(comp_data, res_data):
         # Display current filters
         display_current_filters(filters)
         # Check if wish to add filter
-        if not add_filter_check(len(filters)): # No filter / further filter to be applied
+        if not add_filter_check(len(filters)): # No further filters
             # Check if wish to keep applied filters (if any selected)
             if filters: # One or more filter selected
                 if keep_filters():
@@ -1052,6 +1052,8 @@ def filtering(comp_data, res_data):
             # Send to tutor processing function
             filtered_comp_data, filtered_res_data = process_tutor_filter(
                     filter_option, filtered_comp_data, filtered_res_data)
+        # Check length of returned dataframe
+        # Reverse if dataframe is empty
         filters.append(filter_option)
     
 
