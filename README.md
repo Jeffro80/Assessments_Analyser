@@ -608,7 +608,6 @@ text.
 
 ## Current development step
 
-- Set age calculation from enrolment date
 - Analysis function: Add filtering of sample
 - Analysis function: Add specific courses to process_filter_option()
 
@@ -622,7 +621,6 @@ status of each of these columns for computing total.
 - Order the module completion student output on module column (date order not
 alphabetical).
 - Coding of process_course_filter for specific course.
-- Change Age calculation to be as of Enrolment Date.
 
 ## Future additions
 
@@ -633,7 +631,7 @@ alphabetical).
 - Option to quit when creating a master file.
 - Add save file name to analysis output.
 - Use list of applied filters to manage which filters can be applied.
-- Add filter option for calculating age at enrolment rather than today().
+- Add filter option for calculating age at enrolment or today().
 - Create a new column called enrol_age and use this for filtering of results.
 - Add filtering on multiple courses / CPDs.
 - Add specific details to current filters used e.g. number of days.
