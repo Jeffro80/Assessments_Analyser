@@ -605,13 +605,12 @@ text.
 ## Items to fix
 
 - Add error checking on filters in case a dataframe with 0 rows returned
-- Fix error in analysis() where updated_date conversion to datetime fails.
 
 ## Current development step
 
+- Set age calculation from enrolment date
 - Analysis function: Add filtering of sample
 - Analysis function: Add specific courses to process_filter_option()
-- Remove listing of dates from Analyse module (if working)
 
 
 ## Required development steps
