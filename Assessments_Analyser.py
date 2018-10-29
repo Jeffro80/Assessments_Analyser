@@ -1170,7 +1170,7 @@ def get_age(date_of_birth):
         age (int): Age in years.
     """
     # Skip empty Date of Birth columns
-    if date_of_birth in (None, ''):
+    if date_of_birth in (None, '', np.nan):
         return ''
     # Convert date_of_birth to format YYYY-MM-DD
     updated_date = da.convert_to_datetime(date_of_birth, "%d/%m/%Y")
