@@ -1454,6 +1454,9 @@ def get_e_length(status, start, expiry, graduation):
         expiry_date = da.convert_to_datetime(expiry, '%d/%m/%Y')
         # Subtract expiry date from start date
         e_length = da.calculate_days_dt(start_date, expiry_date)
+    else:
+        # Empty status or any that is not covered above
+        return np.nan
     return e_length
 
 
