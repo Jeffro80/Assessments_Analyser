@@ -391,8 +391,9 @@ def analysis():
     # Add column for Pacific Island status to Master Completion
     comp_data_df['Pacific'] = comp_data_df['Ethnicity'].apply(get_pacific,
                 args=(island_nations,))
-    # Add column for Age to Master Completion and populate
-    comp_data_df['Age'] = comp_data_df['DateOfBirth'].apply(get_age)
+    # Add column for Age at enrolment to Master Completion and populate
+    comp_data_df['Age'] = comp_data_df.apply(lambda x:
+        get_age(x['DateOfBirth'], x['StartDate']), axis=1)
     # Add column for enrolment length to Master Completion
     comp_data_df['EnrolLength'] = comp_data_df.apply(lambda x: get_e_length(
             x['Status'], x['StartDate'], x['ExpiryDate'], x['GraduationDate']
@@ -415,8 +416,9 @@ def analysis():
     # Add column for Pacific Island status to Master Results
     res_data_df['Pacific'] = res_data_df['Ethnicity'].apply(get_pacific,
                 args=(island_nations,))
-    # Add column for Age to Master Results and populate
-    res_data_df['Age'] = res_data_df['DateOfBirth'].apply(get_age)
+    # Add column for Age at enrolment to Master Results and populate
+    res_data_df['Age'] = res_data_df.apply(lambda x: get_age(x['DateOfBirth'],
+               x['StartDate']), axis=1)
     # Add column for enrolment length to Master Results
     res_data_df['EnrolLength'] = res_data_df.apply(lambda x: get_e_length(
             x['Status'], x['StartDate'], x['ExpiryDate'], x['GraduationDate']
@@ -1160,11 +1162,12 @@ def find_transferred(feedback):
         return np.nan
 
 
-def get_age(date_of_birth):
-    """Return age based on today's date.
+def get_age(date_of_birth, enrolment_date):
+    """Return age based on enrolment date.
     
     Args:
-        date_of_birth (date): Date in format DD/MM/YYYY.
+        date_of_birth (date): Date of birth in format DD/MM/YYYY.
+        enrolment_date (date): Enrolment date in format DD/MM/YYYY.
         
     Returns:
         age (int): Age in years.
@@ -1174,7 +1177,9 @@ def get_age(date_of_birth):
         return ''
     # Convert date_of_birth to format YYYY-MM-DD
     updated_date = da.convert_to_datetime(date_of_birth, "%d/%m/%Y")
-    age = da.calculate_age(updated_date)
+    # Convert enrolment_date to format YYYY-MM-DD
+    updated_enrolment = da.convert_to_datetime(enrolment_date, "%d/%m/%Y")
+    age = da.calculate_age(updated_date, updated_enrolment)
     return age
 
 
