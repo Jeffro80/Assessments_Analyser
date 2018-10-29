@@ -15,8 +15,8 @@ The app outputs CSV files for Master files and XLS files for reports.
 ## Version
 
 Version Number 0.523  
-App last updated 21 September 2018  
-Readme last updated 9 October 2018
+App last updated 30 October 2018  
+Readme last updated 30 October 2018
 
 # Operation
 
@@ -605,24 +605,13 @@ text.
 ## Items to fix
 
 - Add error checking on filters in case a dataframe with 0 rows returned
-- Master Completions File currently updating with Month Year when it should be
-MMM-YY
-- Add Module Names file to required files in analysis()
-- Rename Student Details File as Student Data File in the required files section
-of the analysis() function.
-- Add Student Data Headings file to the required files section of the analysis()
-function.
-- Rename enrolment_data.csv as Enrolment Data File in the required files section
-of the analysis() function.
-- Add Enrolment Data Headings File to required files in analysis().
 - Fix error in analysis() where updated_date conversion to datetime fails.
 
 ## Current development step
 
-- Module Analysis: Fix processing of months
 - Analysis function: Add filtering of sample
 - Analysis function: Add specific courses to process_filter_option()
-- Remove listing of dates from Anayse module (if working)
+- Remove listing of dates from Analyse module (if working)
 
 
 ## Required development steps

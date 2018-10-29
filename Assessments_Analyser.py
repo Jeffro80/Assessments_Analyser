@@ -1,58 +1,7 @@
 # Assessment Analyser
-# Version 0.523 21 September 2018
+# Version 0.524 30 October 2018
 # Created by Jeff Mitchell
 # Prepares reports on completion of Assessments and Modules
-
-# Current work:
-# - Module Analysis:
-#   - Fix processing of months
-# - Analysis function
-#   - Add filtering of sample
-#   - process_filter_option() - specific course
-
-# To Add:
-
-# - Load list of transferred out students and use to remove from unknown print
-# - out.
-# - Process duplicated student records before saving - remove non-passing
-# grades
-# - Determine how to deal with students that have transferred - code on Master
-# - Add a filter option - inclusion of Transferred students in analysis
-# - Option to quit when creating a master file
-# - Add save file name to analysis output
-# - Use list of applied filters to manage which filters can be applied
-# - Add filter option for calculating age at enrolment rather than today()
-# - create a new column called enrol_age and use this for filtering of results
-# - Add filtering on multiple courses / CPDs
-# - Add specific details to current filters used e.g. number of days
-# - Add user input for course (specific course)
-# - Add user input for ethnicity (specific ethnicity)
-# - Add non- filters, e.g. non-maori
-# - Add filtering on multiple ethnicities
-# - Add filter on specific tutor
-# - Add filter on multiple tutors
-
-# Known issues:
-
-# - Won't catch Course total if added due to having transferred in its feedback
-# text. Need to catch this rather than crashing
-
-# To Fix:
-
-# - Add error checking on filters in case return a dataframe with 0
-# - Master Completions File updating with Month Year when should be MMM-YY
-
-# To Do:
-
-# - Thorough testing of find_transferred
-# - update_num_ass_col change so that it takes a list of assessments and checks
-# the status of each of these columns for computing total
-# - then repeat for module completion
-# - Order the module completion student output on module column (date order not
-# alphabetical)
-# - Coding of process_course_filter for specific course
-# - Change Age calculation to be as of Enrolment Date
-
 
 
 import copy
@@ -94,6 +43,7 @@ def add_filter_check(filters):
         else:
             print('\nThat is not a valid entry! Please enter either y or n.')
             continue
+
 
 def add_module_cols(assess_data_df, modules_dict, month_order, keep=True):
     """Add a column for each module to the dataframe and populate.
