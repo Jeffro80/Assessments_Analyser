@@ -1058,9 +1058,9 @@ def filtering(comp_data, res_data):
             # Add filter to the filters list if it was applied
             filters.append(filter_option)
         else:
-            print('{} resulted in 0 students being returned. For this reason '
-                  'the filter will not be used. Data stays the same.'.format(
-                          filter_option))
+            print('\n{} resulted in 0 students being returned. For this '
+                  'reason the filter will not be used. Data stays the same'
+                  '.'.format(filter_option))
     
 
 def filter_options_age_message():
@@ -1252,7 +1252,7 @@ def get_age_range(selection):
     elif selection == 'Students aged 55-64':
         return 55, 64
     elif selection == 'Students aged 65+':
-        return 64, 120
+        return 65, 120
     elif selection == 'Specified range':
         lower, upper = get_value_range('age')
         return lower, upper
@@ -1964,7 +1964,9 @@ def process_age_filter(lower, upper, comp_data, res_data):
     """Apply age filter to data.
     
     Applies the selected age filter to the Completion and Results data. Only
-    rows meeting the filter condition are returned.
+    rows meeting the filter condition are returned. If the filter will result
+    in no rows being returned, the filter is discarded and the passed data is
+    returned.
     
     Args:
         lower (int): Lowest value for age range.
@@ -1975,6 +1977,7 @@ def process_age_filter(lower, upper, comp_data, res_data):
     Returns:
         filtered_comp_data (dataframe): Filtered Completion data.
         filtered_res_data (dataframe): Filtered Results data.
+        valid_filter (bool): True if filter has been applied, False if not.
     """
     # Make copy of dataframes in case need to revert
     filtered_comp_data = comp_data.copy()
@@ -1987,8 +1990,16 @@ def process_age_filter(lower, upper, comp_data, res_data):
     # Drop ages that are NaN
     filtered_comp_data.dropna(subset=['Age'], inplace=True)
     filtered_res_data.dropna(subset=['Age'], inplace=True)
-    return filtered_comp_data, filtered_res_data
-    
+    # Check that filter returns at least one row
+    if filtered_comp_data.empty or filtered_comp_data.empty:
+        # Return orginal data
+        valid_filter = False
+        return comp_data, res_data, valid_filter
+    else:
+        # Return updated data
+        valid_filter = True
+        return filtered_comp_data, filtered_res_data, valid_filter
+        
 
 def process_course_filter(filter_option, comp_data, res_data):
     """Apply course filter to data.
