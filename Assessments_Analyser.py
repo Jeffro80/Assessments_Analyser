@@ -1992,7 +1992,7 @@ def process_age_filter(lower, upper, comp_data, res_data):
     filtered_res_data.dropna(subset=['Age'], inplace=True)
     # Check that filter returns at least one row
     if filtered_comp_data.empty or filtered_comp_data.empty:
-        # Return orginal data
+        # Return original data
         valid_filter = False
         return comp_data, res_data, valid_filter
     else:
@@ -2017,6 +2017,7 @@ def process_course_filter(filter_option, comp_data, res_data):
     Returns:
         filtered_comp_data (dataframe): Filtered Completion data.
         filtered_res_data (dataframe): Filtered Results data.
+        valid_filter (bool): True if filter has been applied, False if not.
     """
     # Make copy of dataframes in case need to revert
     filtered_comp_data = comp_data.copy()
@@ -2064,7 +2065,7 @@ def process_course_filter(filter_option, comp_data, res_data):
         filtered_res_data.dropna(subset=['Course'], inplace=True)
     # Check that filter returns at least one row
     if filtered_comp_data.empty or filtered_comp_data.empty:
-        # Return orginal data
+        # Return original data
         valid_filter = False
         return comp_data, res_data, valid_filter
     else:
@@ -2077,7 +2078,9 @@ def process_el_filter(filter_option, comp_data, res_data):
     """Apply enrolment length filter to data.
     
     Applies the selected enrolment length filter to the Completion and Results
-    data. Only rows meeting the filter condition are returned.
+    data. Only rows meeting the filter condition are returned. If the filter
+    will result in no rows being returned, the filter is discarded and the 
+    passed data is returned.
     
     Args:
         filter_option (str): Filter option to be applied.
@@ -2087,6 +2090,7 @@ def process_el_filter(filter_option, comp_data, res_data):
     Returns:
         filtered_comp_data (dataframe): Filtered Completion data.
         filtered_res_data (dataframe): Filtered Results data.
+        valid_filter (bool): True if filter has been applied, False if not.
     """
     # Make copy of dataframes in case need to revert
     filtered_comp_data = comp_data.copy()
@@ -2127,8 +2131,15 @@ def process_el_filter(filter_option, comp_data, res_data):
         # Drop enrolment lengths that are NaN
         filtered_comp_data.dropna(subset=['EnrolLength'], inplace=True)
         filtered_res_data.dropna(subset=['EnrolLength'], inplace=True)
-    return filtered_comp_data, filtered_res_data
- 
+    # Check that filter returns at least one row
+    if filtered_comp_data.empty or filtered_comp_data.empty:
+        # Return original data
+        valid_filter = False
+        return comp_data, res_data, valid_filter
+    else:
+        # Return updated data
+        valid_filter = True
+        return filtered_comp_data, filtered_res_data, valid_filter 
 
 
 def process_ethnicity_filter(filter_option, comp_data, res_data):
