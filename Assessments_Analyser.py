@@ -990,8 +990,8 @@ def filtering(comp_data, res_data):
         filtered_res_data (dataframe): Filtered Master Results data.
     """
     # Make copy of dataframes in case need to revert
-    filtered_comp_data = comp_data.copy()
-    filtered_res_data = res_data.copy()
+    f_comp_data = comp_data.copy()
+    f_res_data = res_data.copy()
     # Hold applied filters
     filters = []
     # Present filter group options and get filter
@@ -1004,7 +1004,7 @@ def filtering(comp_data, res_data):
             if filters: # One or more filter selected
                 if keep_filters():
                     display_applied_filters(filters)
-                    return filtered_comp_data, filtered_res_data
+                    return f_comp_data, f_res_data
                 else:
                     print('\nNo filters will be applied to the data.')
                     return comp_data, res_data
@@ -1028,35 +1028,39 @@ def filtering(comp_data, res_data):
             # Get lower and upper values
             lower, upper = get_age_range(filter_option)
             # Send to age processing function
-            filtered_comp_data, filtered_res_data = process_age_filter(
-                    lower, upper, filtered_comp_data, filtered_res_data)
+            f_comp_data, f_res_data, valid_filter = process_age_filter(
+                    lower, upper, f_comp_data, f_res_data)
         elif filter_group == 'Course':
             # Send to course processing function
-            filtered_comp_data, filtered_res_data = process_course_filter(
-                    filter_option, filtered_comp_data, filtered_res_data)
+            f_comp_data, f_res_data, valid_filter = process_course_filter(
+                    filter_option, f_comp_data, f_res_data)
         elif filter_group == 'Enrolment Length':
             # Send to enrolment length processing function
-            filtered_comp_data, filtered_res_data = process_el_filter(
-                    filter_option, filtered_comp_data, filtered_res_data)
+            f_comp_data, f_res_data, valid_filter = process_el_filter(
+                    filter_option, f_comp_data, f_res_data)
         elif filter_group == 'Ethnicity':
             # Send to ethnicity processing function
-            filtered_comp_data, filtered_res_data = process_ethnicity_filter(
-                    filter_option, filtered_comp_data, filtered_res_data)
+            f_comp_data, f_res_data, valid_filter = process_ethnicity_filter(
+                    filter_option, f_comp_data, f_res_data)
         elif filter_group == 'Gender':
             # Send to gender processing function
-            filtered_comp_data, filtered_res_data = process_gender_filter(
-                    filter_option, filtered_comp_data, filtered_res_data)
+            f_comp_data, f_res_data, valid_filter = process_gender_filter(
+                    filter_option, f_comp_data, f_res_data)
         elif filter_group == 'Status':
             # Send to status processing function
-            filtered_comp_data, filtered_res_data = process_status_filter(
-                    filter_option, filtered_comp_data, filtered_res_data)
+            f_comp_data, f_res_data, valid_filter = process_status_filter(
+                    filter_option, f_comp_data, f_res_data)
         elif filter_group == 'Tutor':
             # Send to tutor processing function
-            filtered_comp_data, filtered_res_data = process_tutor_filter(
-                    filter_option, filtered_comp_data, filtered_res_data)
-        # Check length of returned dataframe
-        # Reverse if dataframe is empty
-        filters.append(filter_option)
+            f_comp_data, f_res_data, valid_filter = process_tutor_filter(
+                    filter_option, f_comp_data, f_res_data)
+        if valid_filter:
+            # Add filter to the filters list if it was applied
+            filters.append(filter_option)
+        else:
+            print('{} resulted in 0 students being returned. For this reason '
+                  'the filter will not be used. Data stays the same.'.format(
+                          filter_option))
     
 
 def filter_options_age_message():
