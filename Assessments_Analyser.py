@@ -1020,8 +1020,6 @@ def filtering(comp_data, res_data):
         filter_option = get_filter_option(filter_group)
         if not filter_option:
             # Deal with no filter selected
-            # Display applied filters
-            # Check if wish to add filter
             continue
         # Apply the selected filter
         if filter_group == 'Age':

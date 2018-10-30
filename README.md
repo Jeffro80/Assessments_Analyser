@@ -604,7 +604,6 @@ text.
 
 ## Items to fix
 
-- Add error checking on filters in case a dataframe with 0 rows returned
 
 ## Current development step
 
