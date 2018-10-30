@@ -2005,7 +2005,9 @@ def process_course_filter(filter_option, comp_data, res_data):
     """Apply course filter to data.
     
     Applies the selected course filter to the Completion and Results data. Only
-    rows meeting the filter condition are returned.
+    rows meeting the filter condition are returned. If the filter will result
+    in no rows being returned, the filter is discarded and the passed data is
+    returned.
     
     Args:
         filter_option (str): Filter option to be applied.
@@ -2060,7 +2062,15 @@ def process_course_filter(filter_option, comp_data, res_data):
         # Drop courses that are NaN
         filtered_comp_data.dropna(subset=['Course'], inplace=True)
         filtered_res_data.dropna(subset=['Course'], inplace=True)
-    return filtered_comp_data, filtered_res_data  
+    # Check that filter returns at least one row
+    if filtered_comp_data.empty or filtered_comp_data.empty:
+        # Return orginal data
+        valid_filter = False
+        return comp_data, res_data, valid_filter
+    else:
+        # Return updated data
+        valid_filter = True
+        return filtered_comp_data, filtered_res_data, valid_filter 
 
 
 def process_el_filter(filter_option, comp_data, res_data):
