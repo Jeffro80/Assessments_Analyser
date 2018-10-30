@@ -2262,7 +2262,9 @@ def process_status_filter(filter_option, comp_data, res_data):
     """Apply status filter to data.
     
     Applies the selected status filter to the Completion and Results data.
-    Only rows meeting the filter condition are returned.
+    Only rows meeting the filter condition are returned. If the filter will
+    result in no rows being returned, the filter is discarded and the passed
+    data is returned.
     
     Args:
         filter_option (str): Filter option to be applied.
@@ -2272,6 +2274,7 @@ def process_status_filter(filter_option, comp_data, res_data):
     Returns:
         filtered_comp_data (dataframe): Filtered Completion data.
         filtered_res_data (dataframe): Filtered Results data.
+        valid_filter (bool): True if filter has been applied, False if not.
     """
     # Make copy of dataframes in case need to revert
     filtered_comp_data = comp_data.copy()
@@ -2298,7 +2301,15 @@ def process_status_filter(filter_option, comp_data, res_data):
         # Drop students that are NaN
         filtered_comp_data.dropna(subset=['Status'], inplace=True)
         filtered_res_data.dropna(subset=['Status'], inplace=True)
-    return filtered_comp_data, filtered_res_data
+    # Check that filter returns at least one row
+    if filtered_comp_data.empty or filtered_comp_data.empty:
+        # Return original data
+        valid_filter = False
+        return comp_data, res_data, valid_filter
+    else:
+        # Return updated data
+        valid_filter = True
+        return filtered_comp_data, filtered_res_data, valid_filter
 
 
 def process_tutor_filter(filter_option, comp_data, res_data):
