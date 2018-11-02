@@ -16,7 +16,7 @@ The app outputs CSV files for Master files and XLS files for reports.
 
 Version Number 0.523  
 App last updated 30 October 2018  
-Readme last updated 30 October 2018
+Readme last updated 2 November 2018
 
 # Operation
 
@@ -640,3 +640,4 @@ alphabetical).
 - Add filtering on multiple ethnicities.
 - Add filter on specific tutor.
 - Add filter on multiple tutors.
+- Add function to check for unknown names in assessment data before processing.
