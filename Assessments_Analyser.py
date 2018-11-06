@@ -139,13 +139,13 @@ def add_percent_comp(assess_data_df, total):
         total (int): Total number of assessments in course.
         
     Returns:
-        assess_data_df (dataframe) Updated with Perc_comp column.
+        assess_data_df (dataframe) Updated with Completion_Percent column.
     """
     # Add column for num
-    assess_data_df['Perc_comp'] = assess_data_df.apply(
+    assess_data_df['Completion_Percent'] = assess_data_df.apply(
             lambda row: 0, axis=1)
     # Populate the column
-    assess_data_df['Perc_comp'] =  assess_data_df[
+    assess_data_df['Completion_Percent'] =  assess_data_df[
             'Completed_Assessments'].apply(update_perc_comp_col, args=(total,))
     return assess_data_df
 
