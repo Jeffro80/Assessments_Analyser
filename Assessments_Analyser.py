@@ -115,14 +115,14 @@ def add_num_mod_comp(assess_data_df, modules):
         modules (list): Module column headings (module names).
         
     Returns:
-        assess_data_df (dataframe) Updated with Num_mod_comp column.
+        assess_data_df (dataframe) Updated with Completed_Modules column.
     """
     # Add column for num
-    assess_data_df['Num_mod_comp'] = assess_data_df.apply(
+    assess_data_df['Completed_Modules'] = assess_data_df.apply(
             lambda row: 0, axis=1)
     # Populate the column
-    assess_data_df['Num_mod_comp'] =  assess_data_df.apply(update_num_ass_col,
-                  args=(modules,), axis=1)
+    assess_data_df['Completed_Modules'] =  assess_data_df.apply(
+            update_num_ass_col, args=(modules,), axis=1)
     return assess_data_df
 
 
