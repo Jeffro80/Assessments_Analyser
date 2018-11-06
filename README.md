@@ -14,9 +14,9 @@ The app outputs CSV files for Master files and XLS files for reports.
 
 ## Version
 
-Version Number 0.523  
-App last updated 30 October 2018  
-Readme last updated 6 November 2018
+Version Number 0.530  
+App last updated 7 November 2018  
+Readme last updated 7 November 2018
 
 # Operation
 
@@ -607,7 +607,6 @@ text.
 
 ## Current development step
 
-- Update column headings in analysis output
 - Additional functions for assessments downloads
 - Analysis function: Add filtering of sample
 - Analysis function: Add specific courses to process_filter_option()
@@ -645,3 +644,4 @@ alphabetical).
 - Add function to identify expired students that have completed at least 50% of course.
 - Add function to identify students that have completed 0 < x < 50%.
 - Add function to identify graduated students.
+- Add progress completion to analysis app (e.g. adding columns).
