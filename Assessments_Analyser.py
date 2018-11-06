@@ -1,5 +1,5 @@
 # Assessment Analyser
-# Version 0.524 30 October 2018
+# Version 0.530 7 November 2018
 # Created by Jeff Mitchell
 # Prepares reports on completion of Assessments and Modules
 
@@ -1902,7 +1902,7 @@ def keep_filters():
 def main():
     repeat = True
     low = 1
-    high = 10
+    high = 13
     while repeat:
         try_again = False
         main_message()
@@ -1935,6 +1935,12 @@ def main():
                 check_assesment(False)
             elif action == 9:
                 continue
+            elif action == 10:
+                continue
+            elif action == 11:
+                continue
+            elif action == 12:
+                continue
             elif action == high:
                 print('\nIf you have generated any files, please find them '
                       'saved to disk. Goodbye.')
@@ -1947,7 +1953,7 @@ def main():
 def main_message():
     """Print the menu of options."""
     print('\n\n*************==========================*****************')
-    print('\nAssessment Analyser version 0.523')
+    print('\nAssessment Analyser version 0.53')
     print('Created by Jeff Mitchell, 2018')
     print('\nOptions:')
     print('\n1 Create Master Completion File')
@@ -1958,8 +1964,11 @@ def main_message():
     print('6 Analyse Module')
     print('7 Assessment Completed Report')
     print('8 Assessment Not Completed Report')
-    print('9 TBC')
-    print('10 Exit')
+    print('9 Identify Expired Students 0% Completion')
+    print('10 Identify Expired Students >= 50% Completion')
+    print('11 Identify Expired Students 0 < X < 50% Completion')
+    print('12 Identify Graduated Students')
+    print('13 Exit')
 
 
 def process_age_filter(lower, upper, comp_data, res_data):
