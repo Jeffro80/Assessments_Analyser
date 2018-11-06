@@ -608,7 +608,6 @@ text.
 ## Current development step
 
 - Update column headings in analysis output
-- Final file save for analysis
 - Additional functions for assessments downloads
 - Analysis function: Add filtering of sample
 - Analysis function: Add specific courses to process_filter_option()
@@ -630,7 +629,6 @@ alphabetical).
 - Determine how to deal with students that have transferred - code on Master.
 - Add a filter option: inclusion of Transferred students in analysis.
 - Option to quit when creating a master file.
-- Add save file name to analysis output.
 - Use list of applied filters to manage which filters can be applied.
 - Add filter option for calculating age at enrolment or today().
 - Create a new column called enrol_age and use this for filtering of results.
