@@ -293,10 +293,6 @@ def analysis():
                       'Months (Short) File', 'Student Data Headings File',
                       'Module Names File']
     ad.confirm_files('Process Analysis Data', required_files)
-    # Display menu
-    # Get analysis action
-    # Perform analysis action
-    # Provide ability to quit or return to main menu
     # Get course code
     course_code = get_course_code()
     # Load Master Completion file for course
@@ -399,8 +395,10 @@ def analysis():
             x['Status'], x['StartDate'], x['ExpiryDate'], x['GraduationDate']
             ),axis=1)
     # Temp save
+    '''
     file_name = 'Check_merge_comp{}.csv'.format(ft.generate_time_string())
     comp_data_df.to_csv(file_name, index=False)
+    '''
     # Create dataframe for Master Results data
     res_data_df = pd.DataFrame(data=master_res_data,
                                   columns=master_res_headings)
@@ -424,8 +422,10 @@ def analysis():
             x['Status'], x['StartDate'], x['ExpiryDate'], x['GraduationDate']
             ),axis=1)
     # Temp save
+    '''
     file_name = 'Check_merge_res{}.csv'.format(ft.generate_time_string())
     res_data_df.to_csv(file_name, index=False)
+    '''
     # Load Modules data into a list of lists
     print('\nLoading {}...'.format('Modules_{}.csv'.format(course_code)))
     modules = ft.load_csv('Modules_{}.csv'.format(course_code))
@@ -446,11 +446,15 @@ def analysis():
     # Add % of course completed column
     comp_data_df = add_percent_comp(comp_data_df, num_assessments)
     # Temp saving
+    '''
     file_name = 'Master_res_check_{}.csv'.format(ft.generate_time_string())
     res_data_df.to_csv(file_name, index=False)
-    # Temp saving
-    file_name = 'Master_comp_check_{}.csv'.format(ft.generate_time_string())
+    '''
+    # Save Analysis file
+    file_name = 'Analysis_{}_{}.csv'.format(course_code,
+                          ft.generate_time_string())
     comp_data_df.to_csv(file_name, index=False)
+    print('\nAnalysis file saved as {}'.format(file_name))
     ft.process_warning_log(warnings, warnings_to_process)
 
 
