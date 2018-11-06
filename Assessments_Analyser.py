@@ -91,14 +91,14 @@ def add_num_ass_comp(assess_data_df, assessments):
         assessments (list): Assessment column headings (assessment names).
         
     Returns:
-        assess_data_df (dataframe) Updated with Num_ass_comp column.
+        assess_data_df (dataframe) Updated with Completed_Assessments column.
     """
     # Add column for num
-    assess_data_df['Num_ass_comp'] = assess_data_df.apply(
+    assess_data_df['Completed_Assessments'] = assess_data_df.apply(
             lambda row: 0, axis=1)
     # Populate the column
-    assess_data_df['Num_ass_comp'] =  assess_data_df.apply(update_num_ass_col,
-                  args=(assessments,), axis=1)
+    assess_data_df['Completed_Assessments'] =  assess_data_df.apply(
+            update_num_ass_col, args=(assessments,), axis=1)
     return assess_data_df
 
 
@@ -145,8 +145,8 @@ def add_percent_comp(assess_data_df, total):
     assess_data_df['Perc_comp'] = assess_data_df.apply(
             lambda row: 0, axis=1)
     # Populate the column
-    assess_data_df['Perc_comp'] =  assess_data_df['Num_ass_comp'].apply(
-            update_perc_comp_col, args=(total,))
+    assess_data_df['Perc_comp'] =  assess_data_df[
+            'Completed_Assessments'].apply(update_perc_comp_col, args=(total,))
     return assess_data_df
 
 
