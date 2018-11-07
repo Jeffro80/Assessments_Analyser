@@ -214,8 +214,7 @@ Data contained on the Assessments_<Course_Code> tab of the Enrolments Google She
 ### Structure
 
 CSV file with the following columns: EnrolmentPK, StudentPK, NameGiven, NameSurname,
-CoursePK, Database Updated, Assessments Downloaded, Assessments File Updated,
-Assessments Stored.
+CoursePK, Assessments Downloaded, Assessments File Updated.
 
 ### Source
 
