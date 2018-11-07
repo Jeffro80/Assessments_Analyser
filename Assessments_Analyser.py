@@ -950,7 +950,8 @@ def extract_at_least_comp():
     warnings_to_process = False
     print('\nProcessing Expired At Least Completion Data.')
     # Confirm the required files are in place
-    required_files = ['Assessment Downloads File', 'Analysis File']
+    required_files = ['Assessment Downloads File', 'Analysis File',
+                      'Graduate Dates File']
     ad.confirm_files('Process Expired At Least Completion Data',
                      required_files)
     # Get course code
@@ -968,16 +969,17 @@ def extract_at_least_comp():
             course_code))
     print('Loaded {}.'.format('Analysis_{}.csv'.format(
             course_code)))
+    # Load Graduation Dates Data
+    print('\nLoading {}...'.format('Graduation Dates Data'))
+    grad_dates_data = ft.load_csv('graduation_dates', 'e')
+    print('Loaded {}.'.format('Graduation Dates Data'))
     # Get minimum % completion
     min_completion = get_minimum()
     # Create string representation of % value
     min_completion_string = float_perc_to_string(min_completion)
     # Extract students in assess_downloads_data that have not been processed
-    assess_pool = get_valid_students(assess_downloads_data)
-    # Check extracted ids in analysis file
-    # - if present, check if completion % is equal to or above min value
-    # - if so, add required columns to list
-    # - if not found, save as a warning
+    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
+    # Extract details of target students
     extracted_students, to_add,  items_to_add = extract_comp_students(
             analysis_data, assess_pool, min_completion, 1)
     if to_add:
@@ -1958,7 +1960,7 @@ def get_tutor_filter():
                   'available options.')
 
 
-def get_valid_students(student_data):
+def get_valid_students(student_data, graduates):
     """Return students that have not had their assessments processed.
     
     Checks if there is any entry in the assessments downloaded or assessments
@@ -1967,12 +1969,15 @@ def get_valid_students(student_data):
     
     Args:
         student_data (list): List of lists, one student per list.
+        graduates (list): List of lists, one graduate per list.
         
     Returns:
         students (list): List of Enrolment IDs for students that have not been
         processed.
     """
     students = []
+    # Extract Graduate IDs
+    grads = ad.extract_list_item(graduates, 0)
     num_students = len(student_data) # For calculating % complete
     n = 0
     for student in student_data:
@@ -1980,8 +1985,12 @@ def get_valid_students(student_data):
         n += 1
         progress = round((n/num_students) * 100)
         print("\rProgress: {}{}".format(progress, '%'), end="", flush=True)
+        # Check if student has graduated
+        if student[0] in grads:
+            # Don't add student
+            continue
         # Check if student has been processed previously
-        if student[5] not in (None, ''):
+        elif student[5] not in (None, ''):
             # Don't add student
             continue
         elif student[6] not in (None, ''):
