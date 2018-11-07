@@ -982,6 +982,46 @@ def extract_month_year(date_data):
     return second_slice[:comma]
 
 
+def extract_zero_comp():
+    """Return students that have 0% completion for the course.
+    
+    Finds students with 0% completion that have not been updated in the
+    assessments download data file.
+    """
+    warnings = ['\nProcessing Zero Completion Data Warnings:\n']
+    warnings_to_process = False
+    print('\nProcessing Zero Completion Data.')
+    # Confirm the required files are in place
+    required_files = ['Assessments Download File', 'Analysis File']
+    ad.confirm_files('Process Zero Completion Data', required_files)
+    # Get course code
+    course_code = get_course_code()
+    # Load Assessments Download file
+    print('\nLoading {}...'.format('Assessments_Downloads_{}.csv'.format(
+            course_code)))
+    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Assessments_Downloads_{}.csv'.format(
+            course_code)))
+    # Load Analysis file
+    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
+    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Analysis_{}.csv'.format(
+            course_code)))
+    # Extract Enrolment IDs from Analysis data into a list
+    analysis_ids = ad.extract_list_item(analysis_data, 0)
+    # Extract from Assessments Download data students with zero completion
+    zero_students = get_zero_students(assess_downloads_data, analysis_ids)
+    # Save file
+    print('')
+    headings = ['EnrolmentPK', 'StudentPK', 'NameGiven', 'NameSurname',
+                'CoursePK']
+    file_name = 'Zero_students_{}_'.format(course_code)
+    ft.save_data_csv(zero_students, headings, file_name)
+    ft.process_warning_log(warnings, warnings_to_process)
+
+
 def filtering(comp_data, res_data):
     """Get and apply filters to data prior to analysis.
     
@@ -1878,6 +1918,56 @@ def get_value_range(value_type=''):
                                                                      upper))
 
 
+def get_zero_students(student_data, student_ids):
+    """Return students with zero completion.
+    
+    Checks if each student in student_data is in the list of student_ids. If
+    not, it checks if there is any text in the last three columns of the
+    student' data. If not, the student is added to the list to be returned
+    (the student has completed 0% of the course and has not yet been
+    processed.)
+    
+    Args:
+        student_data (list): List of lists, one student per list.
+        student_ids (list): List of student ids from the analysis data.
+        
+    Returns:
+        students (list) List of returned students. Returns columns 0, 1, 2, 3,
+        4 from student_data.
+    """
+    students = []
+    num_students = len(student_data) # For calculating % complete
+    n = 0
+    for student in student_data:
+        # Display progress
+        n += 1
+        progress = round((n/num_students) * 100)
+        print("\rProgress: {}{}".format(progress, '%'), end="", flush=True)
+        # Check if student id is in analysis data - process if not
+        if student[0] not in student_ids:
+            add = True
+            # Check if student has been processed previously
+            if student[6] not in (None, ''):
+                # Don't add student
+                add = False
+            elif student[7] not in (None, ''):
+                # Don't add student
+                add = False
+            elif student[8] not in (None, ''):
+                # Don't add student
+                add = False
+            # Add student if necessary
+            if add:
+                # Extract first 5 columns of student's data
+                this_student = []
+                column = 0
+                while column < 5:
+                    this_student.append(student[column])
+                    column += 1
+                students.append(this_student)
+    return students
+
+
 def keep_filters():
     """Return user input for keeping filters.
     
@@ -1934,7 +2024,7 @@ def main():
             elif action == 8:
                 check_assesment(False)
             elif action == 9:
-                continue
+                extract_zero_comp()
             elif action == 10:
                 continue
             elif action == 11:
