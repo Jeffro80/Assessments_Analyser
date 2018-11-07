@@ -970,9 +970,10 @@ def extract_at_least_comp():
             course_code)))
     # Get minimum % completion
     min_completion = get_minimum()
-    # Create string representation of % value to use in printing and save name
+    # Create string representation of % value
     min_completion_string = '{}%'.format(str(min_completion*100))
-    # Extract from assess_downloads_data ids of students that have not been processed
+    # Extract students in assess_downloads_data that have not been processed
+    assess_pool = get_valid_students(assess_downloads_data)
     # Check extracted ids in analysis file
     # - if present, check if completion % is equal to or above min value
     # - if so, add required columns to list
@@ -1884,6 +1885,44 @@ def get_tutor_filter():
         else:
             print('\nThat is not a valid option. Please select from the '
                   'available options.')
+
+
+def get_valid_students(student_data):
+    """Return students that have not had their assessments processed.
+    
+    Checks if there is any entry in the assessments downloaded, assessments
+    file updated, or assessments stored columns. If not, Enrolment ID is added
+    to the list of returned students.
+    
+    Args:
+        student_data (list): List of lists, one student per list.
+        
+    Returns:
+        students (list): List of Enrolment IDs for students that have not been
+        processed.
+    """
+    students = []
+    num_students = len(student_data) # For calculating % complete
+    n = 0
+    for student in student_data:
+        # Display progress
+        n += 1
+        progress = round((n/num_students) * 100)
+        print("\rProgress: {}{}".format(progress, '%'), end="", flush=True)
+        # Check if student has been processed previously
+        if student[6] not in (None, ''):
+            # Don't add student
+            continue
+        elif student[7] not in (None, ''):
+            # Don't add student
+            continue
+        elif student[8] not in (None, ''):
+            # Don't add student
+            continue
+        # Add student
+        else:
+            students.append(student[0])
+    return students
 
 
 def get_value(value_type='', allowed_range=[]):
