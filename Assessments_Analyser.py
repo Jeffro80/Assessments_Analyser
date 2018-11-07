@@ -939,6 +939,52 @@ def display_current_filters(filters):
     return
 
 
+def extract_at_least_comp():
+    """Return expired students that have at least X% completion for the course.
+    
+    Asks for a minimum completion percentage and returns students with at least
+    that % of the course completed. Used for expired students and only returns
+    stuedents that have not been updated in the assessments download data file.
+    """
+    warnings = ['\nProcessing Expired At Least Completion Data Warnings:\n']
+    warnings_to_process = False
+    print('\nProcessing Expired At Least Completion Data.')
+    # Confirm the required files are in place
+    required_files = ['Assessment Downloads File', 'Analysis File']
+    ad.confirm_files('Process Expired At Least Completion Data',
+                     required_files)
+    # Get course code
+    course_code = get_course_code()
+    # Load Assessments Download file
+    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    # Load Analysis file
+    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
+    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Analysis_{}.csv'.format(
+            course_code)))
+    # Get minimum % completion
+    min_completion = get_minimum()
+    '''
+    # Extract Enrolment IDs from Analysis data into a list
+    analysis_ids = ad.extract_list_item(analysis_data, 0)
+    # Extract from Assessments Download data students with zero completion
+    zero_students = get_zero_students(assess_downloads_data, analysis_ids)
+    # Save file
+    print('')
+    headings = ['EnrolmentPK', 'StudentPK', 'NameGiven', 'NameSurname',
+                'CoursePK']
+    file_name = 'At_Least_{}%_students_{}_'.format(min_completion, course_code)
+    ft.save_data_csv(zero_students, headings, file_name)
+    '''
+    ft.process_warning_log(warnings, warnings_to_process)
+
+
 def extract_day_month_year(date_data):
     """Extract day, month and year from date time data.
     
@@ -983,10 +1029,10 @@ def extract_month_year(date_data):
 
 
 def extract_zero_comp():
-    """Return students that have 0% completion for the course.
+    """Return expired students that have 0% completion for the course.
     
     Finds students with 0% completion that have not been updated in the
-    assessments download data file.
+    assessments download data file. Only returns expired students.
     """
     warnings = ['\nProcessing Zero Completion Data Warnings:\n']
     warnings_to_process = False
@@ -1599,6 +1645,34 @@ def get_gender_filter():
                   'available options.')
 
 
+def get_minimum():
+    """Get minimum completion % from user."""
+    repeat = True
+    while repeat:
+        # Get value from user
+        print('\nWhat is the minimum completion % (inclusive)?')
+        print('0 is 0%, 0.5 is 50%, 1 is 100% etc')
+        value = input('Enter a value bewtween 0 and 1: ')
+        # Check value can be converted to a float
+        try:
+            float(value)
+        except ValueError:
+            print('\n{} is not a valid number. Please try again.'.format(
+                    value))
+            continue
+        # Check value is between 0 and 1
+        if float(value) < 0:
+            print('\nCompletion % must be positive. Please try again.')
+            continue
+        elif float(value) > 1:
+            print('\nCompletion % must be no greater than 100% (1). Please try '
+                  'again.')
+            continue
+        else:
+            # Return valid value
+            return float(value)
+
+
 def get_module_headings(start_headings, modules, target_module):
     """Return module headings.
     
@@ -2026,7 +2100,7 @@ def main():
             elif action == 9:
                 extract_zero_comp()
             elif action == 10:
-                continue
+                extract_at_least_comp()
             elif action == 11:
                 continue
             elif action == 12:
