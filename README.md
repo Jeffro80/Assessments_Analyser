@@ -57,6 +57,16 @@ on which the assessment was marked competent.
 
 - Master Results Headings File
 
+## Identify Expired Students 0% Completion
+
+Identifies expired students that have 0% of course completed and have not had their
+entry on the Assessments_<Course_Code> tab of the Enrolments Google Sheet updated.
+
+### Required Files
+
+- Analysis File
+- Assessments Download File
+
 ## Perform Analysis
 
 Performs a range of analysis on the completion of assessments.
@@ -78,10 +88,6 @@ Performs a range of analysis on the completion of assessments.
 - Pacific Island Nations File
 - Student Data File
 - Student Data Headings File
-
-### Notes
-
-Function is still under development.
 
 ## Update Master Completion File
 
@@ -118,6 +124,31 @@ the month being processed and the date on which they were completed.
 - Master Results Headings File
 
 # Files used
+
+## Analysis File
+
+### File Name
+
+Analysis_<Course_Code>.csv  
+e.g. Analysis_ADV.csv
+
+### Contents
+
+Analysis file for the course.
+
+### Structure
+
+CSV file with each column found in the Analysis output file from the Perform Analysis
+function of the app.
+
+### Source
+
+Output from Perform Analysis function of the app.
+
+### Notes
+
+The file needs to be updated before use (by running analysis on the student assessment
+data).
 
 ## Assessment Data File
 
@@ -168,6 +199,27 @@ Created when the course was first set up.
 When a new course is created, check that the raw assessments data export from the
 Learning Platform still matches this format. If the column headings differ, a new
 Assessment_Data_Headings file will need to be created and a new process developed.
+
+## Assessment Downloads File
+
+### File Name
+
+Assessment_Downloads_<Course_Code>.csv  
+e.g. Assessment_Downloads_ADV.csv
+
+### Contents
+
+Data contained on the Assessments_<Course_Code> tab of the Enrolments Google Sheet.
+
+### Structure
+
+CSV file with the following columns: EnrolmentPK, StudentPK, NameGiven, NameSurname,
+CoursePK, Database Updated, Assessments Downloaded, Assessments File Updated,
+Assessments Stored.
+
+### Source
+
+Assessments_<Course_Code> tab of the Enrolments Google Sheet.
 
 ## Assessment Names File
 
@@ -640,7 +692,6 @@ alphabetical).
 - Add filter on specific tutor.
 - Add filter on multiple tutors.
 - Add function to check for unknown names in assessment data before processing.
-- Add function to identify students that have not completed any assessments.
 - Add function to identify expired students that have completed at least 50% of course.
 - Add function to identify students that have completed 0 < x < 50%.
 - Add function to identify graduated students.
