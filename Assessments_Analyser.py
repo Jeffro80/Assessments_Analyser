@@ -971,9 +971,7 @@ def extract_at_least_comp():
     # Get minimum % completion
     min_completion = get_minimum()
     # Create string representation of % value
-    min_completion_string = '{}'.format(str(min_completion*100))
-    # Drop decimal point
-    min_completion_string = '{}%'.format(min_completion_string[:-2])
+    min_completion_string = float_perc_to_string(min_completion)
     # Extract students in assess_downloads_data that have not been processed
     assess_pool = get_valid_students(assess_downloads_data)
     # Check extracted ids in analysis file
@@ -1317,6 +1315,23 @@ def find_transferred(feedback):
         return 'Transfer'
     else:
         return np.nan
+
+
+def float_perc_to_string(value):
+    """Return string representation of a float.
+    
+    Float is returned as a % (rounded to nearest 1%). Note that it is not 100%
+    accurate: 0.29 will return 28%.
+    
+    Args:
+        value (float): raw percentage value.
+        
+    Returns:
+        (str) value formatted as a % e.g. 56%.
+    """
+    val = str(value*100)
+    place = val.find('.')
+    return '{}%'.format(val[:place])
 
 
 def get_age(date_of_birth, enrolment_date):
