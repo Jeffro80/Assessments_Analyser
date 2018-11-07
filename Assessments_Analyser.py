@@ -974,7 +974,62 @@ def extract_at_least_comp():
     grad_dates_data = ft.load_csv('graduation_dates', 'e')
     print('Loaded {}.'.format('Graduation Dates Data'))
     # Get minimum % completion
-    min_completion = get_minimum()
+    min_completion = get_limit('minimum')
+    # Create string representation of % value
+    min_completion_string = float_perc_to_string(min_completion)
+    # Extract students in assess_downloads_data that have not been processed
+    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
+    # Extract details of target students
+    extracted_students, to_add,  items_to_add = extract_comp_students(
+            analysis_data, assess_pool, min_completion, 1)
+    if to_add:
+        for item in items_to_add:
+            warnings.append(item)
+    # Save file
+    print('')
+    headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
+    file_name = 'At_least_{}_students_{}_'.format(min_completion_string,
+                          course_code)
+    ft.save_data_csv(extracted_students, headings, file_name)
+    ft.process_warning_log(warnings, warnings_to_process)
+
+
+def extract_at_most_comp():
+    """Return expired students that have at most X% completion for the course.
+    
+    Asks for a maximum completion percentage and returns students with at most
+    that % of the course completed. Used for expired students and only returns
+    stuedents that have not been updated in the assessments download data file.
+    """
+    warnings = ['\nProcessing Expired At Most Completion Data Warnings:\n']
+    warnings_to_process = False
+    print('\nProcessing Expired At Most Completion Data.')
+    # Confirm the required files are in place
+    required_files = ['Assessment Downloads File', 'Analysis File',
+                      'Graduation Dates File']
+    ad.confirm_files('Process Expired At Most Completion Data',
+                     required_files)
+    # Get course code
+    course_code = get_course_code()
+    # Load Assessments Download file
+    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    # Load Analysis file
+    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
+    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Analysis_{}.csv'.format(
+            course_code)))
+    # Load Graduation Dates Data
+    print('\nLoading {}...'.format('Graduation Dates Data'))
+    grad_dates_data = ft.load_csv('graduation_dates', 'e')
+    print('Loaded {}.'.format('Graduation Dates Data'))
+    # Get maximum % completion
+    max_completion = get_maximum()
     # Create string representation of % value
     min_completion_string = float_perc_to_string(min_completion)
     # Extract students in assess_downloads_data that have not been processed
@@ -1726,12 +1781,19 @@ def get_gender_filter():
                   'available options.')
 
 
-def get_minimum():
-    """Get minimum completion % from user."""
+def get_limit(paramater):
+    """Get limit for completion % from user.
+    
+    Args:
+        paramater (str): Either Minimum or Maximum. Used for output to screen.
+        
+    Returns:
+        value (float): User supplied limit. Value between 0 and 1.    
+    """
     repeat = True
     while repeat:
         # Get value from user
-        print('\nWhat is the minimum completion % (inclusive)?')
+        print('\nWhat is the {} completion % (inclusive)?'.format(paramater))
         print('0 is 0%, 0.5 is 50%, 1 is 100% etc')
         value = input('Enter a value bewtween 0 and 1: ')
         # Check value can be converted to a float
