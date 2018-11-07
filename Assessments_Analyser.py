@@ -997,11 +997,11 @@ def extract_zero_comp():
     # Get course code
     course_code = get_course_code()
     # Load Assessments Download file
-    print('\nLoading {}...'.format('Assessments_Downloads_{}.csv'.format(
+    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
             course_code)))
     assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
             course_code))
-    print('Loaded {}.'.format('Assessments_Downloads_{}.csv'.format(
+    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
             course_code)))
     # Load Analysis file
     print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
