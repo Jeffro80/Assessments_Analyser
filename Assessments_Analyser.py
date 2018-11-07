@@ -951,7 +951,7 @@ def extract_at_least_comp():
     print('\nProcessing Expired At Least Completion Data.')
     # Confirm the required files are in place
     required_files = ['Assessment Downloads File', 'Analysis File',
-                      'Graduate Dates File']
+                      'Graduation Dates File']
     ad.confirm_files('Process Expired At Least Completion Data',
                      required_files)
     # Get course code
