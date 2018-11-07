@@ -992,7 +992,7 @@ def extract_zero_comp():
     warnings_to_process = False
     print('\nProcessing Zero Completion Data.')
     # Confirm the required files are in place
-    required_files = ['Assessments Download File', 'Analysis File']
+    required_files = ['Assessment Downloads File', 'Analysis File']
     ad.confirm_files('Process Zero Completion Data', required_files)
     # Get course code
     course_code = get_course_code()
