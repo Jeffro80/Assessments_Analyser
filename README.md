@@ -15,8 +15,8 @@ The app outputs CSV files for Master files and XLS files for reports.
 ## Version
 
 Version Number 0.530  
-App last updated 7 November 2018  
-Readme last updated 7 November 2018
+App last updated 8 November 2018  
+Readme last updated 8 November 2018
 
 # Operation
 
@@ -56,6 +56,23 @@ on which the assessment was marked competent.
 ### Required Files
 
 - Master Results Headings File
+
+## Identify Expired Students At Least X% Completion
+
+Identifies expired students that have at least the passed % of course completed and
+have not had their entry on the Assessments_<Course_Code> tab of the Enrolments Google
+Sheet updated. Graduated students are removed from the output.
+
+### Required Files
+
+- Analysis File
+- Assessments Download File
+- Graduation Dates File
+
+### Notes
+
+% figures in file names for extracted students are not always correct. E.g. .29 will
+be saved as '29%' due to rounding of floats.
 
 ## Identify Expired Students 0% Completion
 
@@ -652,6 +669,8 @@ the app to run:
 
 - Won't filter out Course Total entry if it also has 'transferred' in its feedback
 text.
+- % figures in file names for extracted students are not always correct. E.g. .29 will
+be saved as '29%' due to rounding of floats.
 
 ## Items to fix
 
@@ -691,7 +710,6 @@ alphabetical).
 - Add filter on specific tutor.
 - Add filter on multiple tutors.
 - Add function to check for unknown names in assessment data before processing.
-- Add function to identify expired students that have completed at least 50% of course.
 - Add function to identify students that have completed 0 < x < 50%.
 - Add function to identify graduated students.
 - Add progress completion to analysis app (e.g. adding columns).
