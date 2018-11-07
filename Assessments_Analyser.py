@@ -978,6 +978,8 @@ def extract_at_least_comp():
     # - if present, check if completion % is equal to or above min value
     # - if so, add required columns to list
     # - if not found, save as a warning
+    extracted_students = extract_comp_students(analysis_data, assess_pool,
+                                               min_completion, 1)
     '''
     # Extract Enrolment IDs from Analysis data into a list
     analysis_ids = ad.extract_list_item(analysis_data, 0)
@@ -1890,9 +1892,9 @@ def get_tutor_filter():
 def get_valid_students(student_data):
     """Return students that have not had their assessments processed.
     
-    Checks if there is any entry in the assessments downloaded, assessments
-    file updated, or assessments stored columns. If not, Enrolment ID is added
-    to the list of returned students.
+    Checks if there is any entry in the assessments downloaded or assessments
+    file updated columns. If not, Enrolment ID is added to the list of returned
+    students.
     
     Args:
         student_data (list): List of lists, one student per list.
@@ -1910,13 +1912,10 @@ def get_valid_students(student_data):
         progress = round((n/num_students) * 100)
         print("\rProgress: {}{}".format(progress, '%'), end="", flush=True)
         # Check if student has been processed previously
-        if student[6] not in (None, ''):
+        if student[5] not in (None, ''):
             # Don't add student
             continue
-        elif student[7] not in (None, ''):
-            # Don't add student
-            continue
-        elif student[8] not in (None, ''):
+        elif student[6] not in (None, ''):
             # Don't add student
             continue
         # Add student
@@ -2042,7 +2041,7 @@ def get_zero_students(student_data, student_ids):
     """Return students with zero completion.
     
     Checks if each student in student_data is in the list of student_ids. If
-    not, it checks if there is any text in the last three columns of the
+    not, it checks if there is any text in the last two columns of the
     student' data. If not, the student is added to the list to be returned
     (the student has completed 0% of the course and has not yet been
     processed.)
@@ -2067,13 +2066,10 @@ def get_zero_students(student_data, student_ids):
         if student[0] not in student_ids:
             add = True
             # Check if student has been processed previously
-            if student[6] not in (None, ''):
+            if student[5] not in (None, ''):
                 # Don't add student
                 add = False
-            elif student[7] not in (None, ''):
-                # Don't add student
-                add = False
-            elif student[8] not in (None, ''):
+            elif student[6] not in (None, ''):
                 # Don't add student
                 add = False
             # Add student if necessary
