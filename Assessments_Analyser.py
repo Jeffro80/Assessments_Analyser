@@ -971,28 +971,83 @@ def extract_at_least_comp():
     # Get minimum % completion
     min_completion = get_minimum()
     # Create string representation of % value
-    min_completion_string = '{}%'.format(str(min_completion*100))
+    min_completion_string = '{}'.format(str(min_completion*100))
+    # Drop decimal point
+    min_completion_string = '{}%'.format(min_completion_string[:-2])
     # Extract students in assess_downloads_data that have not been processed
     assess_pool = get_valid_students(assess_downloads_data)
     # Check extracted ids in analysis file
     # - if present, check if completion % is equal to or above min value
     # - if so, add required columns to list
     # - if not found, save as a warning
-    extracted_students = extract_comp_students(analysis_data, assess_pool,
-                                               min_completion, 1)
-    '''
-    # Extract Enrolment IDs from Analysis data into a list
-    analysis_ids = ad.extract_list_item(analysis_data, 0)
-    # Extract from Assessments Download data students with zero completion
-    zero_students = get_zero_students(assess_downloads_data, analysis_ids)
-    '''
+    extracted_students, to_add,  items_to_add = extract_comp_students(
+            analysis_data, assess_pool, min_completion, 1)
+    if to_add:
+        for item in items_to_add:
+            warnings.append(item)
     # Save file
     print('')
     headings = ['EnrolmentPK', 'StudentPK', 'NameGiven', 'NameSurname',
                 'CoursePK']
-    file_name = 'At_Least_{}%_students_{}_'.format(min_completion, course_code)
-    ft.save_data_csv(zero_students, headings, file_name)
+    file_name = 'At_least_{}_students_{}_'.format(min_completion_string,
+                          course_code)
+    ft.save_data_csv(extracted_students, headings, file_name)
     ft.process_warning_log(warnings, warnings_to_process)
+
+
+def extract_comp_students(student_data, valid_students, min_comp, max_comp):
+    """Return students with completion % in the passed range.
+    
+    Retruns students from valid_students that are in student_data and have
+    their completion status fall within the min and max completion %.
+    
+    Args:
+        student_data (list): List of lists, one student per list.
+        valid_students (list): Enrolment IDs of students to check.
+        min_comp (float): Minimum completion % (inclusive).
+        max_comp (float): Maximum completion % (inclusive).
+        
+    Returns:
+        students (list) List of returned students. Returns columns 0, 1, 2, 3,
+        4 from student_data.    
+    """
+    students = []
+    # List of enrolment ids in student_data
+    analysis_students = ad.extract_list_item(student_data, 0)
+    warnings = ['\nExtracting Students Warnings:\n']
+    num_students = len(valid_students) # For calculating % complete
+    n = 0
+    for student in valid_students:
+        # Display progress
+        n += 1
+        progress = round((n/num_students) * 100)
+        print("\rProgress: {}{}".format(progress, '%'), end="", flush=True)
+        # Check if student is in student data
+        if student not in analysis_students:
+            warnings.append('Enrolment ID {} is not in the Analysis '
+                            'data.'.format(student))
+        else:
+            # Find student in student_data
+            for analysis_student in student_data:
+                if analysis_student[0] == student:
+                    # Check above minimum
+                    if float(analysis_student[-1]) < min_comp:
+                        break
+                    # Check below maximum
+                    elif float(analysis_student[-1]) > max_comp:
+                        break
+                    else:
+                        # Extract first 5 columns of student's data
+                        this_student = []
+                        for i in range(0,5):
+                            this_student.append(analysis_student[i])
+                        students.append(this_student)
+                        break             
+    # Check if any warnings have been identified, return if they have
+    if len(warnings) > 1:
+        return students, True, warnings
+    else:
+        return students, False, warnings
 
 
 def extract_day_month_year(date_data):
