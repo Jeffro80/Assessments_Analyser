@@ -970,18 +970,25 @@ def extract_at_least_comp():
             course_code)))
     # Get minimum % completion
     min_completion = get_minimum()
+    # Create string representation of % value to use in printing and save name
+    min_completion_string = '{}%'.format(str(min_completion*100))
+    # Extract from assess_downloads_data ids of students that have not been processed
+    # Check extracted ids in analysis file
+    # - if present, check if completion % is equal to or above min value
+    # - if so, add required columns to list
+    # - if not found, save as a warning
     '''
     # Extract Enrolment IDs from Analysis data into a list
     analysis_ids = ad.extract_list_item(analysis_data, 0)
     # Extract from Assessments Download data students with zero completion
     zero_students = get_zero_students(assess_downloads_data, analysis_ids)
+    '''
     # Save file
     print('')
     headings = ['EnrolmentPK', 'StudentPK', 'NameGiven', 'NameSurname',
                 'CoursePK']
     file_name = 'At_Least_{}%_students_{}_'.format(min_completion, course_code)
     ft.save_data_csv(zero_students, headings, file_name)
-    '''
     ft.process_warning_log(warnings, warnings_to_process)
 
 
