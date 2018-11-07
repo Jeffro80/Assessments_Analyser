@@ -985,8 +985,7 @@ def extract_at_least_comp():
             warnings.append(item)
     # Save file
     print('')
-    headings = ['EnrolmentPK', 'StudentPK', 'NameGiven', 'NameSurname',
-                'CoursePK']
+    headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
     file_name = 'At_least_{}_students_{}_'.format(min_completion_string,
                           course_code)
     ft.save_data_csv(extracted_students, headings, file_name)
@@ -1035,9 +1034,9 @@ def extract_comp_students(student_data, valid_students, min_comp, max_comp):
                     elif float(analysis_student[-1]) > max_comp:
                         break
                     else:
-                        # Extract first 5 columns of student's data
+                        # Extract first 4 columns of student's data
                         this_student = []
-                        for i in range(0,5):
+                        for i in range(0,4):
                             this_student.append(analysis_student[i])
                         students.append(this_student)
                         break             
