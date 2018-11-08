@@ -91,6 +91,25 @@ Sheet updated. Graduated students are removed from the output.
 % figures in file names for extracted students are not always correct. E.g. .29 will
 be saved as '29%' due to rounding of floats.
 
+## Identify Expired Students Between X% and Y% Completion
+
+Identifies expired students that have passed within the provided % range of the
+course (inclusive) and have not had their entry on the Assessments_<Course_Code> tab
+of the Enrolments Google Sheet updated. Graduated students are removed from the output.
+
+### Required Files
+
+- Analysis File
+- Assessments Download File
+- Graduation Dates File
+
+### Notes
+
+% figures in file names for extracted students are not always correct. E.g. .29 will
+be saved as '29%' due to rounding of floats.  
+To select a specific % (e.g. 50%), use the desired % for both the minimum and maximum values
+(e.g. 0.5).
+
 ## Identify Expired Students 0% Completion
 
 Identifies expired students that have 0% of course completed and have not had their
@@ -694,7 +713,6 @@ be saved as '29%' due to rounding of floats.
 
 ## Current development step
 
-- Additional functions for assessments downloads
 - Analysis function: Add filtering of sample
 - Analysis function: Add specific courses to process_filter_option()
 
@@ -727,6 +745,5 @@ alphabetical).
 - Add filter on specific tutor.
 - Add filter on multiple tutors.
 - Add function to check for unknown names in assessment data before processing.
-- Add function to identify students that have completed 0 < x < 50%.
 - Add function to identify graduated students.
 - Add progress completion to analysis app (e.g. adding columns).
