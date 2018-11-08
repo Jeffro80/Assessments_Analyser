@@ -1065,6 +1065,11 @@ def extract_comp_students(student_data, valid_students, min_comp, max_comp):
         students (list) List of returned students. Returns columns 0, 1, 2, 3,
         4 from student_data.    
     """
+    # Check min_comp is not greater than max_comp
+    if min_comp > max_comp:
+        print('Minimum value ({}) is greater than Maximum value ({}). App will'
+              ' now exit. Please try again with valid Minimum and Maximum '
+              'values.'.format(min_comp, max_comp))
     students = []
     # List of enrolment ids in student_data
     analysis_students = ad.extract_list_item(student_data, 0)
