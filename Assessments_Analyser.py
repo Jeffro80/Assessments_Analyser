@@ -944,7 +944,7 @@ def extract_at_least_comp():
     
     Asks for a minimum completion percentage and returns students with at least
     that % of the course completed. Used for expired students and only returns
-    stuedents that have not been updated in the assessments download data file.
+    students that have not been updated in the assessments download data file.
     """
     warnings = ['\nProcessing Expired At Least Completion Data Warnings:\n']
     warnings_to_process = False
@@ -999,7 +999,7 @@ def extract_at_most_comp():
     
     Asks for a maximum completion percentage and returns students with at most
     that % of the course completed. Used for expired students and only returns
-    stuedents that have not been updated in the assessments download data file.
+    students that have not been updated in the assessments download data file.
     """
     warnings = ['\nProcessing Expired At Most Completion Data Warnings:\n']
     warnings_to_process = False
@@ -1150,6 +1150,63 @@ def extract_month_year(date_data):
     second_slice = first_slice[second_space+1:]
     comma = second_slice.index(',')
     return second_slice[:comma]
+
+
+def extract_range_comp():
+    """Return expired students within X% completion range for the course.
+    
+    Asks for a minimum and maximum completion percentage and returns students 
+    whose completion falls within that range. Used for expired students and
+    only returns students that have not been updated in the assessments
+    download data file.
+    """
+    warnings = ['\nProcessing Expired Range Completion Data Warnings:\n']
+    warnings_to_process = False
+    print('\nProcessing Expired Range Completion Data.')
+    # Confirm the required files are in place
+    required_files = ['Assessment Downloads File', 'Analysis File',
+                      'Graduation Dates File']
+    ad.confirm_files('Process Expired At Most Completion Data',
+                     required_files)
+    # Get course code
+    course_code = get_course_code()
+    # Load Assessments Download file
+    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    # Load Analysis file
+    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
+    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Analysis_{}.csv'.format(
+            course_code)))
+    # Load Graduation Dates Data
+    print('\nLoading {}...'.format('Graduation Dates Data'))
+    grad_dates_data = ft.load_csv('graduation_dates', 'e')
+    print('Loaded {}.'.format('Graduation Dates Data'))
+    # Get minimum and maximum % completion
+    min_completion, max_completion = get_range()
+    # Create string representation of % value
+    min_completion_string = float_perc_to_string(min_completion)
+    max_completion_string = float_perc_to_string(max_completion)
+    # Extract students in assess_downloads_data that have not been processed
+    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
+    # Extract details of target students
+    extracted_students, to_add,  items_to_add = extract_comp_students(
+            analysis_data, assess_pool, min_completion, max_completion)
+    if to_add:
+        for item in items_to_add:
+            warnings.append(item)
+    # Save file
+    print('')
+    headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
+    file_name = 'Between_{}_and_{}_students_{}_'.format(min_completion_string,
+                         max_completion_string, course_code)
+    ft.save_data_csv(extracted_students, headings, file_name)
+    ft.process_warning_log(warnings, warnings_to_process)
 
 
 def extract_zero_comp():
@@ -1937,6 +1994,31 @@ def get_passing_scores(scores, assessments):
     return passing_scores
     
 
+def get_range():
+    """Get range for completion % from user.
+    
+    Gets a minimum and maximum number and checks that the minimum is no
+    greater than the maximum.
+           
+    Returns:
+        minimum (float): User supplied limit. Value between 0 and 1.  
+        maximum (float): User supplied limit. Value between 0 and 1.
+    """
+    while True:
+        # Get minimum value from user
+        paramater = 'minimum'
+        minimum = get_limit(paramater)
+        paramater = 'maximum'
+        maximum = get_limit(paramater)
+        # Check minimum not greater than maximum
+        if minimum > maximum:
+            print('\nThe minimum ({}) cannot be greater than the maximum ({})'
+                  '. Please try angain.'.format(minimum, maximum))
+            continue
+        else:
+            return minimum, maximum            
+            
+
 def get_score_name(course_code):
     """Return file name for assessment scores file.
     
@@ -2291,7 +2373,7 @@ def main():
             elif action == 11:
                 extract_at_most_comp()
             elif action == 12:
-                continue
+                extract_range_comp()
             elif action == 13:
                 continue
             elif action == high:
