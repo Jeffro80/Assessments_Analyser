@@ -1029,21 +1029,21 @@ def extract_at_most_comp():
     grad_dates_data = ft.load_csv('graduation_dates', 'e')
     print('Loaded {}.'.format('Graduation Dates Data'))
     # Get maximum % completion
-    max_completion = get_maximum()
+    max_completion = get_limit('maximum')
     # Create string representation of % value
-    min_completion_string = float_perc_to_string(min_completion)
+    max_completion_string = float_perc_to_string(max_completion)
     # Extract students in assess_downloads_data that have not been processed
     assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
     # Extract details of target students
     extracted_students, to_add,  items_to_add = extract_comp_students(
-            analysis_data, assess_pool, min_completion, 1)
+            analysis_data, assess_pool, 0, max_completion)
     if to_add:
         for item in items_to_add:
             warnings.append(item)
     # Save file
     print('')
     headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
-    file_name = 'At_least_{}_students_{}_'.format(min_completion_string,
+    file_name = 'At_most_{}_students_{}_'.format(max_completion_string,
                           course_code)
     ft.save_data_csv(extracted_students, headings, file_name)
     ft.process_warning_log(warnings, warnings_to_process)
@@ -2284,7 +2284,7 @@ def main():
             elif action == 10:
                 extract_at_least_comp()
             elif action == 11:
-                continue
+                extract_at_most_comp()
             elif action == 12:
                 continue
             elif action == high:
