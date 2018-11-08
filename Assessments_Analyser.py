@@ -939,116 +939,6 @@ def display_current_filters(filters):
     return
 
 
-def extract_at_least_comp():
-    """Return expired students that have at least X% completion for the course.
-    
-    Asks for a minimum completion percentage and returns students with at least
-    that % of the course completed. Used for expired students and only returns
-    students that have not been updated in the assessments download data file.
-    """
-    warnings = ['\nProcessing Expired At Least Completion Data Warnings:\n']
-    warnings_to_process = False
-    print('\nProcessing Expired At Least Completion Data.')
-    # Confirm the required files are in place
-    required_files = ['Assessment Downloads File', 'Analysis File',
-                      'Graduation Dates File']
-    ad.confirm_files('Process Expired At Least Completion Data',
-                     required_files)
-    # Get course code
-    course_code = get_course_code()
-    # Load Assessments Download file
-    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
-            course_code)))
-    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
-            course_code))
-    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
-            course_code)))
-    # Load Analysis file
-    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
-    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
-            course_code))
-    print('Loaded {}.'.format('Analysis_{}.csv'.format(
-            course_code)))
-    # Load Graduation Dates Data
-    print('\nLoading {}...'.format('Graduation Dates Data'))
-    grad_dates_data = ft.load_csv('graduation_dates', 'e')
-    print('Loaded {}.'.format('Graduation Dates Data'))
-    # Get minimum % completion
-    min_completion = get_limit('minimum')
-    # Create string representation of % value
-    min_completion_string = float_perc_to_string(min_completion)
-    # Extract students in assess_downloads_data that have not been processed
-    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
-    # Extract details of target students
-    extracted_students, to_add,  items_to_add = extract_comp_students(
-            analysis_data, assess_pool, min_completion, 1)
-    if to_add:
-        for item in items_to_add:
-            warnings.append(item)
-    # Save file
-    print('')
-    headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
-    file_name = 'Completed_at_least_{}_{}_'.format(min_completion_string,
-                          course_code)
-    ft.save_data_csv(extracted_students, headings, file_name)
-    ft.process_warning_log(warnings, warnings_to_process)
-
-
-def extract_at_most_comp():
-    """Return expired students that have at most X% completion for the course.
-    
-    Asks for a maximum completion percentage and returns students with at most
-    that % of the course completed. Used for expired students and only returns
-    students that have not been updated in the assessments download data file.
-    """
-    warnings = ['\nProcessing Expired At Most Completion Data Warnings:\n']
-    warnings_to_process = False
-    print('\nProcessing Expired At Most Completion Data.')
-    # Confirm the required files are in place
-    required_files = ['Assessment Downloads File', 'Analysis File',
-                      'Graduation Dates File']
-    ad.confirm_files('Process Expired At Most Completion Data',
-                     required_files)
-    # Get course code
-    course_code = get_course_code()
-    # Load Assessments Download file
-    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
-            course_code)))
-    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
-            course_code))
-    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
-            course_code)))
-    # Load Analysis file
-    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
-    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
-            course_code))
-    print('Loaded {}.'.format('Analysis_{}.csv'.format(
-            course_code)))
-    # Load Graduation Dates Data
-    print('\nLoading {}...'.format('Graduation Dates Data'))
-    grad_dates_data = ft.load_csv('graduation_dates', 'e')
-    print('Loaded {}.'.format('Graduation Dates Data'))
-    # Get maximum % completion
-    max_completion = get_limit('maximum')
-    # Create string representation of % value
-    max_completion_string = float_perc_to_string(max_completion)
-    # Extract students in assess_downloads_data that have not been processed
-    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
-    # Extract details of target students
-    extracted_students, to_add,  items_to_add = extract_comp_students(
-            analysis_data, assess_pool, 0, max_completion)
-    if to_add:
-        for item in items_to_add:
-            warnings.append(item)
-    # Save file
-    print('')
-    headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
-    file_name = 'Completed_at_most_{}_{}_'.format(max_completion_string,
-                          course_code)
-    ft.save_data_csv(extracted_students, headings, file_name)
-    ft.process_warning_log(warnings, warnings_to_process)
-
-
 def extract_comp_students(student_data, valid_students, min_comp, max_comp):
     """Return students with completion % in the passed range.
     
@@ -1150,103 +1040,6 @@ def extract_month_year(date_data):
     second_slice = first_slice[second_space+1:]
     comma = second_slice.index(',')
     return second_slice[:comma]
-
-
-def extract_range_comp():
-    """Return expired students within X% completion range for the course.
-    
-    Asks for a minimum and maximum completion percentage and returns students 
-    whose completion falls within that range. Used for expired students and
-    only returns students that have not been updated in the assessments
-    download data file.
-    """
-    warnings = ['\nProcessing Expired Range Completion Data Warnings:\n']
-    warnings_to_process = False
-    print('\nProcessing Expired Range Completion Data.')
-    # Confirm the required files are in place
-    required_files = ['Assessment Downloads File', 'Analysis File',
-                      'Graduation Dates File']
-    ad.confirm_files('Process Expired At Most Completion Data',
-                     required_files)
-    # Get course code
-    course_code = get_course_code()
-    # Load Assessments Download file
-    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
-            course_code)))
-    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
-            course_code))
-    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
-            course_code)))
-    # Load Analysis file
-    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
-    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
-            course_code))
-    print('Loaded {}.'.format('Analysis_{}.csv'.format(
-            course_code)))
-    # Load Graduation Dates Data
-    print('\nLoading {}...'.format('Graduation Dates Data'))
-    grad_dates_data = ft.load_csv('graduation_dates', 'e')
-    print('Loaded {}.'.format('Graduation Dates Data'))
-    # Get minimum and maximum % completion
-    min_completion, max_completion = get_range()
-    # Create string representation of % value
-    min_completion_string = float_perc_to_string(min_completion)
-    max_completion_string = float_perc_to_string(max_completion)
-    # Extract students in assess_downloads_data that have not been processed
-    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
-    # Extract details of target students
-    extracted_students, to_add,  items_to_add = extract_comp_students(
-            analysis_data, assess_pool, min_completion, max_completion)
-    if to_add:
-        for item in items_to_add:
-            warnings.append(item)
-    # Save file
-    print('')
-    headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
-    file_name = 'Completed_between_{}_and_{}_{}_'.format(min_completion_string,
-                         max_completion_string, course_code)
-    ft.save_data_csv(extracted_students, headings, file_name)
-    ft.process_warning_log(warnings, warnings_to_process)
-
-
-def extract_zero_comp():
-    """Return expired students that have 0% completion for the course.
-    
-    Finds students with 0% completion that have not been updated in the
-    assessments download data file. Only returns expired students.
-    """
-    warnings = ['\nProcessing Zero Completion Data Warnings:\n']
-    warnings_to_process = False
-    print('\nProcessing Zero Completion Data.')
-    # Confirm the required files are in place
-    required_files = ['Assessment Downloads File', 'Analysis File']
-    ad.confirm_files('Process Zero Completion Data', required_files)
-    # Get course code
-    course_code = get_course_code()
-    # Load Assessments Download file
-    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
-            course_code)))
-    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
-            course_code))
-    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
-            course_code)))
-    # Load Analysis file
-    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
-    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
-            course_code))
-    print('Loaded {}.'.format('Analysis_{}.csv'.format(
-            course_code)))
-    # Extract Enrolment IDs from Analysis data into a list
-    analysis_ids = ad.extract_list_item(analysis_data, 0)
-    # Extract from Assessments Download data students with zero completion
-    zero_students = get_zero_students(assess_downloads_data, analysis_ids)
-    # Save file
-    print('')
-    headings = ['EnrolmentPK', 'StudentPK', 'NameGiven', 'NameSurname',
-                'CoursePK']
-    file_name = 'Completed_0%_{}_'.format(course_code)
-    ft.save_data_csv(zero_students, headings, file_name)
-    ft.process_warning_log(warnings, warnings_to_process)
 
 
 def filtering(comp_data, res_data):
@@ -2311,6 +2104,213 @@ def get_zero_students(student_data, student_ids):
     return students
 
 
+def identify_at_least_comp():
+    """Return expired students that have at least X% completion for the course.
+    
+    Asks for a minimum completion percentage and returns students with at least
+    that % of the course completed. Used for expired students and only returns
+    students that have not been updated in the assessments download data file.
+    """
+    warnings = ['\nProcessing Expired At Least Completion Data Warnings:\n']
+    warnings_to_process = False
+    print('\nProcessing Expired At Least Completion Data.')
+    # Confirm the required files are in place
+    required_files = ['Assessment Downloads File', 'Analysis File',
+                      'Graduation Dates File']
+    ad.confirm_files('Process Expired At Least Completion Data',
+                     required_files)
+    # Get course code
+    course_code = get_course_code()
+    # Load Assessments Download file
+    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    # Load Analysis file
+    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
+    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Analysis_{}.csv'.format(
+            course_code)))
+    # Load Graduation Dates Data
+    print('\nLoading {}...'.format('Graduation Dates Data'))
+    grad_dates_data = ft.load_csv('graduation_dates', 'e')
+    print('Loaded {}.'.format('Graduation Dates Data'))
+    # Get minimum % completion
+    min_completion = get_limit('minimum')
+    # Create string representation of % value
+    min_completion_string = float_perc_to_string(min_completion)
+    # Extract students in assess_downloads_data that have not been processed
+    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
+    # Extract details of target students
+    extracted_students, to_add,  items_to_add = extract_comp_students(
+            analysis_data, assess_pool, min_completion, 1)
+    if to_add:
+        for item in items_to_add:
+            warnings.append(item)
+    # Save file
+    print('')
+    headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
+    file_name = 'Completed_at_least_{}_{}_'.format(min_completion_string,
+                          course_code)
+    ft.save_data_csv(extracted_students, headings, file_name)
+    ft.process_warning_log(warnings, warnings_to_process)
+
+
+def identify_at_most_comp():
+    """Return expired students that have at most X% completion for the course.
+    
+    Asks for a maximum completion percentage and returns students with at most
+    that % of the course completed. Used for expired students and only returns
+    students that have not been updated in the assessments download data file.
+    """
+    warnings = ['\nProcessing Expired At Most Completion Data Warnings:\n']
+    warnings_to_process = False
+    print('\nProcessing Expired At Most Completion Data.')
+    # Confirm the required files are in place
+    required_files = ['Assessment Downloads File', 'Analysis File',
+                      'Graduation Dates File']
+    ad.confirm_files('Process Expired At Most Completion Data',
+                     required_files)
+    # Get course code
+    course_code = get_course_code()
+    # Load Assessments Download file
+    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    # Load Analysis file
+    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
+    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Analysis_{}.csv'.format(
+            course_code)))
+    # Load Graduation Dates Data
+    print('\nLoading {}...'.format('Graduation Dates Data'))
+    grad_dates_data = ft.load_csv('graduation_dates', 'e')
+    print('Loaded {}.'.format('Graduation Dates Data'))
+    # Get maximum % completion
+    max_completion = get_limit('maximum')
+    # Create string representation of % value
+    max_completion_string = float_perc_to_string(max_completion)
+    # Extract students in assess_downloads_data that have not been processed
+    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
+    # Extract details of target students
+    extracted_students, to_add,  items_to_add = extract_comp_students(
+            analysis_data, assess_pool, 0, max_completion)
+    if to_add:
+        for item in items_to_add:
+            warnings.append(item)
+    # Save file
+    print('')
+    headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
+    file_name = 'Completed_at_most_{}_{}_'.format(max_completion_string,
+                          course_code)
+    ft.save_data_csv(extracted_students, headings, file_name)
+    ft.process_warning_log(warnings, warnings_to_process)
+
+
+def identify_range_comp():
+    """Return expired students within X% completion range for the course.
+    
+    Asks for a minimum and maximum completion percentage and returns students 
+    whose completion falls within that range. Used for expired students and
+    only returns students that have not been updated in the assessments
+    download data file.
+    """
+    warnings = ['\nProcessing Expired Range Completion Data Warnings:\n']
+    warnings_to_process = False
+    print('\nProcessing Expired Range Completion Data.')
+    # Confirm the required files are in place
+    required_files = ['Assessment Downloads File', 'Analysis File',
+                      'Graduation Dates File']
+    ad.confirm_files('Process Expired At Most Completion Data',
+                     required_files)
+    # Get course code
+    course_code = get_course_code()
+    # Load Assessments Download file
+    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    # Load Analysis file
+    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
+    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Analysis_{}.csv'.format(
+            course_code)))
+    # Load Graduation Dates Data
+    print('\nLoading {}...'.format('Graduation Dates Data'))
+    grad_dates_data = ft.load_csv('graduation_dates', 'e')
+    print('Loaded {}.'.format('Graduation Dates Data'))
+    # Get minimum and maximum % completion
+    min_completion, max_completion = get_range()
+    # Create string representation of % value
+    min_completion_string = float_perc_to_string(min_completion)
+    max_completion_string = float_perc_to_string(max_completion)
+    # Extract students in assess_downloads_data that have not been processed
+    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
+    # Extract details of target students
+    extracted_students, to_add,  items_to_add = extract_comp_students(
+            analysis_data, assess_pool, min_completion, max_completion)
+    if to_add:
+        for item in items_to_add:
+            warnings.append(item)
+    # Save file
+    print('')
+    headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
+    file_name = 'Completed_between_{}_and_{}_{}_'.format(min_completion_string,
+                         max_completion_string, course_code)
+    ft.save_data_csv(extracted_students, headings, file_name)
+    ft.process_warning_log(warnings, warnings_to_process)
+
+
+def identify_zero_comp():
+    """Return expired students that have 0% completion for the course.
+    
+    Finds students with 0% completion that have not been updated in the
+    assessments download data file. Only returns expired students.
+    """
+    warnings = ['\nProcessing Zero Completion Data Warnings:\n']
+    warnings_to_process = False
+    print('\nProcessing Zero Completion Data.')
+    # Confirm the required files are in place
+    required_files = ['Assessment Downloads File', 'Analysis File']
+    ad.confirm_files('Process Zero Completion Data', required_files)
+    # Get course code
+    course_code = get_course_code()
+    # Load Assessments Download file
+    print('\nLoading {}...'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    assess_downloads_data = ft.load_csv('Assessment_Downloads_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Assessment_Downloads_{}.csv'.format(
+            course_code)))
+    # Load Analysis file
+    print('\nLoading {}...'.format('Analysis_{}.csv'.format(course_code)))
+    analysis_data = ft.load_csv('Analysis_{}.csv'.format(
+            course_code))
+    print('Loaded {}.'.format('Analysis_{}.csv'.format(
+            course_code)))
+    # Extract Enrolment IDs from Analysis data into a list
+    analysis_ids = ad.extract_list_item(analysis_data, 0)
+    # Extract from Assessments Download data students with zero completion
+    zero_students = get_zero_students(assess_downloads_data, analysis_ids)
+    # Save file
+    print('')
+    headings = ['EnrolmentPK', 'StudentPK', 'NameGiven', 'NameSurname',
+                'CoursePK']
+    file_name = 'Completed_0%_{}_'.format(course_code)
+    ft.save_data_csv(zero_students, headings, file_name)
+    ft.process_warning_log(warnings, warnings_to_process)
+
+
 def keep_filters():
     """Return user input for keeping filters.
     
@@ -2367,13 +2367,13 @@ def main():
             elif action == 8:
                 check_assesment(False)
             elif action == 9:
-                extract_zero_comp()
+                identify_zero_comp()
             elif action == 10:
-                extract_at_least_comp()
+                identify_at_least_comp()
             elif action == 11:
-                extract_at_most_comp()
+                identify_at_most_comp()
             elif action == 12:
-                extract_range_comp()
+                identify_range_comp()
             elif action == 13:
                 continue
             elif action == high:
