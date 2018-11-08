@@ -74,6 +74,23 @@ Sheet updated. Graduated students are removed from the output.
 % figures in file names for extracted students are not always correct. E.g. .29 will
 be saved as '29%' due to rounding of floats.
 
+## Identify Expired Students At Most X% Completion
+
+Identifies expired students that have at most the passed % of course completed and
+have not had their entry on the Assessments_<Course_Code> tab of the Enrolments Google
+Sheet updated. Graduated students are removed from the output.
+
+### Required Files
+
+- Analysis File
+- Assessments Download File
+- Graduation Dates File
+
+### Notes
+
+% figures in file names for extracted students are not always correct. E.g. .29 will
+be saved as '29%' due to rounding of floats.
+
 ## Identify Expired Students 0% Completion
 
 Identifies expired students that have 0% of course completed and have not had their
