@@ -2248,7 +2248,7 @@ def keep_filters():
 def main():
     repeat = True
     low = 1
-    high = 13
+    high = 14
     while repeat:
         try_again = False
         main_message()
@@ -2287,6 +2287,8 @@ def main():
                 extract_at_most_comp()
             elif action == 12:
                 continue
+            elif action == 13:
+                continue
             elif action == high:
                 print('\nIf you have generated any files, please find them '
                       'saved to disk. Goodbye.')
@@ -2312,9 +2314,10 @@ def main_message():
     print('8 Assessment Not Completed Report')
     print('9 Identify Expired Students 0% Completion')
     print('10 Identify Expired Students At Least X% Completion')
-    print('11 Identify Expired Students Between X% and Y% Completion')
-    print('12 Identify Graduated Students')
-    print('13 Exit')
+    print('11 Identify Expired Students At Most X% Completion')
+    print('12 Identify Expired Students Between X% and Y% Completion')
+    print('13 Identify Graduated Students')
+    print('14 Exit')
 
 
 def process_age_filter(lower, upper, comp_data, res_data):
