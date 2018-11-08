@@ -988,7 +988,7 @@ def extract_at_least_comp():
     # Save file
     print('')
     headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
-    file_name = 'At_least_{}_students_{}_'.format(min_completion_string,
+    file_name = 'Completed_at_least_{}_{}_'.format(min_completion_string,
                           course_code)
     ft.save_data_csv(extracted_students, headings, file_name)
     ft.process_warning_log(warnings, warnings_to_process)
@@ -1043,7 +1043,7 @@ def extract_at_most_comp():
     # Save file
     print('')
     headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
-    file_name = 'At_most_{}_students_{}_'.format(max_completion_string,
+    file_name = 'Completed_at_most_{}_{}_'.format(max_completion_string,
                           course_code)
     ft.save_data_csv(extracted_students, headings, file_name)
     ft.process_warning_log(warnings, warnings_to_process)
@@ -1203,7 +1203,7 @@ def extract_range_comp():
     # Save file
     print('')
     headings = ['EnrolmentPK', 'StudentPK', 'Name', 'CoursePK']
-    file_name = 'Between_{}_and_{}_students_{}_'.format(min_completion_string,
+    file_name = 'Completed_between_{}_and_{}_{}_'.format(min_completion_string,
                          max_completion_string, course_code)
     ft.save_data_csv(extracted_students, headings, file_name)
     ft.process_warning_log(warnings, warnings_to_process)
@@ -1244,7 +1244,7 @@ def extract_zero_comp():
     print('')
     headings = ['EnrolmentPK', 'StudentPK', 'NameGiven', 'NameSurname',
                 'CoursePK']
-    file_name = 'Zero_students_{}_'.format(course_code)
+    file_name = 'Completed_0%_{}_'.format(course_code)
     ft.save_data_csv(zero_students, headings, file_name)
     ft.process_warning_log(warnings, warnings_to_process)
 
