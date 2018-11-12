@@ -61,12 +61,14 @@ on which the assessment was marked competent.
 
 Identifies expired students that have at least the passed % of course completed and
 have not had their entry on the Assessments_<Course_Code> tab of the Enrolments Google
-Sheet updated. Graduated students are removed from the output.
+Sheet updated. Graduated students are removed from the output as are students that
+expired less than 30 days prior to the date the report was run.
 
 ### Required Files
 
 - Analysis File
 - Assessments Download File
+- Expiry Dates File
 - Graduation Dates File
 
 ### Notes
@@ -78,13 +80,16 @@ be saved as '29%' due to rounding of floats.
 
 Identifies expired students that have at most the passed % of course completed and
 have not had their entry on the Assessments_<Course_Code> tab of the Enrolments Google
-Sheet updated. Graduated students are removed from the output.
+Sheet updated. Graduated students are removed from the output as are students that
+expired less than 30 days prior to the date the report was run.
 
 ### Required Files
 
 - Analysis File
 - Assessments Download File
+- Expiry Dates File
 - Graduation Dates File
+
 
 ### Notes
 
@@ -95,12 +100,14 @@ be saved as '29%' due to rounding of floats.
 
 Identifies expired students that have passed within the provided % range of the
 course (inclusive) and have not had their entry on the Assessments_<Course_Code> tab
-of the Enrolments Google Sheet updated. Graduated students are removed from the output.
+of the Enrolments Google Sheet updated. Graduated students are removed from the output
+as are students that expired less than 30 days prior to the date the report was run.
 
 ### Required Files
 
 - Analysis File
 - Assessments Download File
+- Expiry Dates File
 - Graduation Dates File
 
 ### Notes
@@ -114,11 +121,13 @@ To select a specific % (e.g. 50%), use the desired % for both the minimum and ma
 
 Identifies expired students that have 0% of course completed and have not had their
 entry on the Assessments_<Course_Code> tab of the Enrolments Google Sheet updated.
+Students that expired less than 30 days prior to the date the report was run are removed.
 
 ### Required Files
 
 - Analysis File
 - Assessments Download File
+- Expiry Dates File
 
 ## Perform Analysis
 
@@ -413,6 +422,26 @@ if only a specific course is desired.
 File needs to be updated manually using unknown_names.txt for students that have
 different names between the Learning Platform and the Student Database. Use
 EnrolmentID to find students listed in unknown_names.txt.
+
+## Expiry Dates File
+
+### File Name
+
+expiry_dates_<CoursePK>.csv where <Course_Code> is the base code for the course,
+e.g. ADV.
+
+### Contents
+
+Enrolment IDs and Expiry Date for each student in the base course code.
+
+### Structure
+
+CSV file with the columns EnrolmentPK, ExpiryDate
+
+### Source
+
+tblEnrolments in the Student Database (EnrolmentPK and ExpiryDate). Can be filtered
+prior to exporting if only a specific course is desired.
 
 ## Graduation Dates File
 
@@ -713,7 +742,6 @@ be saved as '29%' due to rounding of floats.
 
 ## Current development step
 
-- Add 30 day buffer to Identify Expired students functions
 
 
 ## Required development steps
