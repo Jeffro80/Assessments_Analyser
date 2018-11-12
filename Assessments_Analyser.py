@@ -2108,7 +2108,6 @@ def get_zero_students(student_data, student_ids, expiry):
         4 from student_data.
     """
     students = []
-    print(expiry)
     num_students = len(student_data) # For calculating % complete
     n = 0
     for student in student_data:
