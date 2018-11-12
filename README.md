@@ -713,8 +713,8 @@ be saved as '29%' due to rounding of floats.
 
 ## Current development step
 
-- Analysis function: Add filtering of sample
-- Analysis function: Add specific courses to process_filter_option()
+- Add 30 day buffer to Identify Expired students functions
+
 
 ## Required development steps
 
@@ -747,3 +747,5 @@ alphabetical).
 - Add function to check for unknown names in assessment data before processing.
 - Add function to identify graduated students.
 - Add progress completion to analysis app (e.g. adding columns).
+- Analysis function: Add filtering of sample.
+- Analysis function: Add specific courses to process_filter_option().
