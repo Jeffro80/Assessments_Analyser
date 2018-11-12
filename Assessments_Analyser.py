@@ -1501,6 +1501,30 @@ def get_ethnicity_filter():
                   'available options.')
 
 
+def get_expired_under(expiry, num_days):
+    """Return students that expired less than the passed number of days ago.
+    
+    Compares the student's expiry date to the cut off date passed. If the
+    expiry date is later then the student is added to the returned list.
+    
+    Args:
+        expired (list): List of lists of student expiry date data.
+        num_days (int): Number of days to work back from today.
+        
+    Returns:
+        expired_under (list): List of lists for students expiring after the
+        passed date (todays date - num_days).
+    """
+    expired_under = []
+    for student in expiry:
+        # Check expiry date is prior to today's date
+        if da.get_days_past(student[1]):
+            # Check if expiry date is less than num_days prior to today
+            if da.get_days_past(student[1]) < num_days:
+                expired_under.append(student)
+    return expired_under
+
+
 def get_e_length(status, start, expiry, graduation):
     """Return number of days student has been enrolled.
     
@@ -1902,16 +1926,18 @@ def get_tutor_filter():
                   'available options.')
 
 
-def get_valid_students(student_data, graduates):
+def get_valid_students(student_data, graduates, expiry):
     """Return students that have not had their assessments processed.
     
     Checks if there is any entry in the assessments downloaded or assessments
     file updated columns. If not, Enrolment ID is added to the list of returned
-    students.
+    students. Filters out students that have graduated and students that
+    expired less than 30 days prior to the report.
     
     Args:
         student_data (list): List of lists, one student per list.
         graduates (list): List of lists, one graduate per list.
+        expiry (list): List of lists, one student per list.
         
     Returns:
         students (list): List of Enrolment IDs for students that have not been
@@ -1920,6 +1946,8 @@ def get_valid_students(student_data, graduates):
     students = []
     # Extract Graduate IDs
     grads = ad.extract_list_item(graduates, 0)
+    # Extract IDs of students expired less than 30 days prior
+    expired_under_30 = get_expired_under(expiry, 30)
     num_students = len(student_data) # For calculating % complete
     n = 0
     for student in student_data:
@@ -1929,6 +1957,10 @@ def get_valid_students(student_data, graduates):
         print("\rProgress: {}{}".format(progress, '%'), end="", flush=True)
         # Check if student has graduated
         if student[0] in grads:
+            # Don't add student
+            continue
+        # Check if expiry date is < 30 days ago
+        elif student[0] in expired_under_30:
             # Don't add student
             continue
         # Check if student has been processed previously
@@ -2116,7 +2148,7 @@ def identify_at_least_comp():
     print('\nProcessing Expired At Least Completion Data.')
     # Confirm the required files are in place
     required_files = ['Assessment Downloads File', 'Analysis File',
-                      'Graduation Dates File']
+                      'Graduation Dates File', 'Expiry Dates File']
     ad.confirm_files('Process Expired At Least Completion Data',
                      required_files)
     # Get course code
@@ -2134,16 +2166,21 @@ def identify_at_least_comp():
             course_code))
     print('Loaded {}.'.format('Analysis_{}.csv'.format(
             course_code)))
-    # Load Graduation Dates Data
+    # Load Graduation Dates file
     print('\nLoading {}...'.format('Graduation Dates Data'))
     grad_dates_data = ft.load_csv('graduation_dates', 'e')
     print('Loaded {}.'.format('Graduation Dates Data'))
+    # Load Expiry Dates file
+    print('\nLoading {}...'.format('expiry_dates_{}.csv'.format(course_code)))
+    expiry_dates_data = ft.load_csv('expiry_dates_{}'.format(course_code), 'e')
+    print('Loaded {}.'.format('expiry_dates_{}.csv'.format(course_code)))
     # Get minimum % completion
     min_completion = get_limit('minimum')
     # Create string representation of % value
     min_completion_string = float_perc_to_string(min_completion)
     # Extract students in assess_downloads_data that have not been processed
-    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
+    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data,
+                                     expiry_dates_data)
     # Extract details of target students
     extracted_students, to_add,  items_to_add = extract_comp_students(
             analysis_data, assess_pool, min_completion, 1)
@@ -2300,6 +2337,7 @@ def identify_zero_comp():
             course_code)))
     # Extract Enrolment IDs from Analysis data into a list
     analysis_ids = ad.extract_list_item(analysis_data, 0)
+    # Remove students that expired less than 30 days ago
     # Extract from Assessments Download data students with zero completion
     zero_students = get_zero_students(assess_downloads_data, analysis_ids)
     # Save file
