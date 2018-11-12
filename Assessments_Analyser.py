@@ -2208,7 +2208,7 @@ def identify_at_most_comp():
     print('\nProcessing Expired At Most Completion Data.')
     # Confirm the required files are in place
     required_files = ['Assessment Downloads File', 'Analysis File',
-                      'Graduation Dates File']
+                      'Graduation Dates File', 'Expiry Dates File']
     ad.confirm_files('Process Expired At Most Completion Data',
                      required_files)
     # Get course code
@@ -2230,12 +2230,17 @@ def identify_at_most_comp():
     print('\nLoading {}...'.format('Graduation Dates Data'))
     grad_dates_data = ft.load_csv('graduation_dates', 'e')
     print('Loaded {}.'.format('Graduation Dates Data'))
+    # Load Expiry Dates file
+    print('\nLoading {}...'.format('expiry_dates_{}.csv'.format(course_code)))
+    expiry_dates_data = ft.load_csv('expiry_dates_{}'.format(course_code), 'e')
+    print('Loaded {}.'.format('expiry_dates_{}.csv'.format(course_code)))
     # Get maximum % completion
     max_completion = get_limit('maximum')
     # Create string representation of % value
     max_completion_string = float_perc_to_string(max_completion)
     # Extract students in assess_downloads_data that have not been processed
-    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data)
+    assess_pool = get_valid_students(assess_downloads_data, grad_dates_data,
+                                     expiry_dates_data)
     # Extract details of target students
     extracted_students, to_add,  items_to_add = extract_comp_students(
             analysis_data, assess_pool, 0, max_completion)
