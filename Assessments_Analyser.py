@@ -2089,24 +2089,26 @@ def get_value_range(value_type=''):
                                                                      upper))
 
 
-def get_zero_students(student_data, student_ids):
+def get_zero_students(student_data, student_ids, expiry):
     """Return students with zero completion.
     
     Checks if each student in student_data is in the list of student_ids. If
     not, it checks if there is any text in the last two columns of the
     student' data. If not, the student is added to the list to be returned
     (the student has completed 0% of the course and has not yet been
-    processed.)
+    processed). Students that expired less than 30 days ago are not included.
     
     Args:
         student_data (list): List of lists, one student per list.
-        student_ids (list): List of student ids from the analysis data.
+        student_ids (list): List of enrolment ids from the analysis data.
+        expiry (list): List of enrolment ids of students expired < 30 days ago.
         
     Returns:
         students (list) List of returned students. Returns columns 0, 1, 2, 3,
         4 from student_data.
     """
     students = []
+    print(expiry)
     num_students = len(student_data) # For calculating % complete
     n = 0
     for student in student_data:
@@ -2122,6 +2124,10 @@ def get_zero_students(student_data, student_ids):
                 # Don't add student
                 add = False
             elif student[6] not in (None, ''):
+                # Don't add student
+                add = False
+            # Check if student expired < 30 days ago
+            if student[0] in expiry:
                 # Don't add student
                 add = False
             # Add student if necessary
@@ -2328,7 +2334,8 @@ def identify_zero_comp():
     warnings_to_process = False
     print('\nProcessing Zero Completion Data.')
     # Confirm the required files are in place
-    required_files = ['Assessment Downloads File', 'Analysis File']
+    required_files = ['Assessment Downloads File', 'Analysis File',
+                      'Expiry Dates File']
     ad.confirm_files('Process Zero Completion Data', required_files)
     # Get course code
     course_code = get_course_code()
@@ -2345,11 +2352,17 @@ def identify_zero_comp():
             course_code))
     print('Loaded {}.'.format('Analysis_{}.csv'.format(
             course_code)))
+    # Load Expiry Dates file
+    print('\nLoading {}...'.format('expiry_dates_{}.csv'.format(course_code)))
+    expiry_dates_data = ft.load_csv('expiry_dates_{}'.format(course_code), 'e')
+    print('Loaded {}.'.format('expiry_dates_{}.csv'.format(course_code)))
     # Extract Enrolment IDs from Analysis data into a list
     analysis_ids = ad.extract_list_item(analysis_data, 0)
-    # Remove students that expired less than 30 days ago
+    # Extract Enrolment IDs of students expiring < 30 days ago
+    expiry_ids = get_expired_under(expiry_dates_data, 30)
     # Extract from Assessments Download data students with zero completion
-    zero_students = get_zero_students(assess_downloads_data, analysis_ids)
+    zero_students = get_zero_students(assess_downloads_data, analysis_ids,
+                                      expiry_ids)
     # Save file
     print('')
     headings = ['EnrolmentPK', 'StudentPK', 'NameGiven', 'NameSurname',
